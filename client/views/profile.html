@@ -1,0 +1,31 @@
+<template name="profile">
+	<div class="container-fluid">
+		<br>
+		<div class="row">
+			<div class="col-xs-3" style="text-align:center;">
+				<img src="{{getAvatarURL userId}}" width="80px" class="img-circle" alt="#" />
+				<br><br>
+				<input class="myAvatarInput" type="file" style="width:0;height:0;">
+				<button type="submit" class="btn btn-default changeAvatar">Змінити аватарку</button>
+			</div>
+			<div class="col-xs-9">
+				<table class="table table-condensed table-striped">
+					<tbody>
+						<tr>
+							<td>П.І.Б.</td>
+							<td><b>{{getUserName userId}}</b></td>
+						</tr>
+						<tr>
+							<td>email</td>
+							<td><b>{{getUserEmail userId}}</b></td>
+						</tr>
+						<tr>
+							<td>Телефони</td>
+							<td><b>{{getUserPhone userId}}</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</template>

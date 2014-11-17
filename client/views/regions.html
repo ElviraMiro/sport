@@ -1,0 +1,66 @@
+<template name="regions">
+	<div class="container-fluid">
+		<h4>Перелік регіонів/населених пунктів</h4>
+		<table class="table table-condensed table-striped">
+			<thead>
+				<th>
+					<button class="btn btn-primary addRegion"><i class="fa fa-plus"></i></button>
+					Назва регіону/населеного пункту
+				</th>
+				<th></th>
+			</thead>
+			<tbody>
+				{{#if regions}}
+					{{#each regions}}
+						<tr>
+							<td style="padding-left:{{padding}}0px">
+								{{region.title}}
+							</td>
+							<td>
+								<div class="btn-group pull-right" role="group">
+									<button class="btn btn-primary addRegion"><i class="fa fa-plus"></i></button>
+									<button class="btn btn-default editRegion"><i class="fa fa-pencil"></i></button>
+									<button class="btn btn-danger removeRegion"><i class="fa fa-trash-o"></i></button>
+								</div>
+							</td>
+						</tr>
+					{{/each}}
+				{{else}}
+					Незаповнена база
+				{{/if}}
+			</tbody>
+		</table>
+	</div>
+	{{> modalRegion}}
+</template>
+
+<template name="modalRegion">
+	<div class="modal fade" id="modalRegion">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">{{modalTitle}}</h4>
+				</div>
+				<div class="modal-body">
+					{{#with editRegion}}
+						{{#if parent}}
+							<div class="form-group">
+								<label for="parent">Батьківський регіон/населений пункт</label>
+								<input type="text" class="form-control" id="parent" value="{{parent}}" readonly>
+							</div>
+						{{/if}}
+						<div class="form-group">
+							<label for="title">Назва регіона/населеного пункта</label>
+							<input type="text" class="form-control" id="title" value="{{title}}">
+						</div>
+					{{/with}}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Закрити</button>
+					<button type="button" class="btn btn-primary saveRegion">Зберігти</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>

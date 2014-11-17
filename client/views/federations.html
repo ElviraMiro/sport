@@ -1,0 +1,67 @@
+<template name="sportfederations">
+	<div class="container-fluid">
+		<h4>Перелік спортивних об'єднань</h4>
+		<h5>Вид спорту {{sport.title}}</h5>
+		<table class="table table-condensed table-striped">
+			<thead>
+				<th>Регіон/населений пункт / Назва спортивного об'єднання</th>
+				<th></th>
+			</thead>
+			<tbody>
+				{{#each federations}}
+					{{#if region}}
+						<tr>
+							<td>
+								{{region.title}}
+							</td>
+							<td>
+								<button class="btn btn-primary addFederation"><i class="fa fa-plus"></i></button>
+							</td>
+						</tr>
+					{{else}}
+						<tr>
+							<td>
+								{{federation.title}}
+							</td>
+							<td>
+								<div class="btn-group pull-right" role="group">
+									<button class="btn btn-default editFederation"><i class="fa fa-pencil"></i></button>
+									<button class="btn btn-danger removeFederation"><i class="fa fa-trash-o"></i></button>
+									<button class="btn btn-default editContactsFederation"><i class="fa fa-phone"></i></button>
+									<button class="btn btn-default editAdminsFederation"><i class="fa fa-users"></i></button>
+								</div>
+							</td>
+						</tr>
+					{{/if}}
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+	{{> modalFederation}}
+</template>
+
+<template name="modalFederation">
+	<div class="modal fade" id="modalFederation">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">{{modalTitle}}</h4>
+					<h4 class="modal-title">в регіоні/населеному пункті {{region}}</h4>
+				</div>
+				<div class="modal-body">
+					{{#with editFederation}}
+						<div class="form-group">
+							<label for="title">Назва спортивного об'єднання</label>
+							<input type="text" class="form-control" id="title" value="{{title}}">
+						</div>
+					{{/with}}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Закрити</button>
+					<button type="button" class="btn btn-primary saveFederation">Зберігти</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
