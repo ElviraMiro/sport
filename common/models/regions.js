@@ -24,7 +24,7 @@ Regions.before.insert(function(userId, doc) {
 	if (parentId) {
 		var parent = Regions.findOne(parentId),
 			parents = [parent._id];
-		while (parent.parentId) {
+		while (parent && parent.parentId) {
 			parent = Regions.findOne(parent.parentId);
 			parents.push(parent._id);
 		}
@@ -37,7 +37,7 @@ Locations = new Meteor.Collection("locations");
 var LocationSchema = new SimpleSchema({
 	title: {
 		type: String,
-		label: 'Назва місця проведення',
+		label: 'Назва місця',
 		max: 200
 	},
 	regionId: {
@@ -46,7 +46,7 @@ var LocationSchema = new SimpleSchema({
 	},
 	address: {
 		type: String,
-		label: 'Регіон/населений пункт',
+		label: 'Адреса',
 		max: 200,
 		optional: true
 	}

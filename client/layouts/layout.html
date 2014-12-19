@@ -1,19 +1,9 @@
 <template name="layout">
+    {{> leftnav}}
     {{> topnav}}
-    <div class="container-fluid" style="padding-top:60px">
-        <div class="row row-offcanvas row-offcanvas-left">
-            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 sidebar-offcanvas" id="sidebarLeft" role="navigation">
-                <!--{{>adminLeftNav}}-->
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                {{> yield}}
-            </div>
-            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 sidebar-offcanvas" id="sidebarRight" role="navigation">
-                <!--{{>adminRightNav}}-->
-            </div>
-        </div>
+    <div class="pusher">
+        {{> yield}}
     </div>
-    {{> confirmationDeleteModal}}
 </template>
 
 <template name="confirmationDeleteModal">

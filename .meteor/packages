@@ -5,11 +5,9 @@
 
 meteor-platform
 insecure
-mrt:accounts-ui-bootstrap-3
 iron:router
 accounts-base
 accounts-password
-chrismbeckett:fontawesome4
 matb33:collection-hooks
 tmeasday:presence
 zimme:collection-timestampable
@@ -20,6 +18,9 @@ alanning:roles
 cfs:gridfs
 cfs:standard-packages
 email
-mizzao:bootstrap-3
 chrismbeckett:toastr
+chrismbeckett:fontawesome4
+nooitaf:semantic-ui
+jameslefrere:autoform-semantic-ui
+useraccounts:semantic-ui
 

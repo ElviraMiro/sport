@@ -1,5 +1,22 @@
-<template name="topnav">
-    <nav class="navbar navbar-default navbar-fixed-top visible-sm visible-md visible-lg" role="navigation">
+<template name="leftnav">
+    <div class="ui left vertical sidebar menu leftnav">
+        <a href="/" class="item brand">
+            <i class="fa fa-trophy"></i>
+        </a>
+        <a class="item">
+            <i class="mail icon"></i> Red
+        </a>
+        <a class="item {{isAdmin}}">
+            <i class="configure icon"></i> Администрирование
+        </a>
+        <a href="/profile/{{currentUser._id}}" class="item {{isLogin}}">
+            <i class="user icon"></i> Профиль
+        </a>
+        <a class="item logout {{isLogin}}">
+            <i class="sign out icon"></i> Вийти
+        </a>
+    </div>
+    <!--nav class="navbar navbar-default navbar-fixed-top visible-sm visible-md visible-lg" role="navigation">
         <div class="container">
             <div class="navbar-header" style="width:100%">
                 <a class="navbar-brand" href="/"><i class="fa fa-trophy"></i></a>
@@ -31,5 +48,18 @@
                 <a class="navbar-brand" href="/"><i class="fa fa-trophy"></i></a>
             </div>
         </div>
-    </nav>
+    </nav-->
+</template>
+
+<template name="topnav">
+    <div class="ui top attached menu">
+        <div class="item toggleLeftnav">
+            <i class="content icon"></i>
+        </div>
+        {{#if currentUser}}
+            <div class="item right">
+                <span class="text"><img src="{{getAvatarURL currentUser._id}}" class="ui image avatar" style="height:15px;width:15px"> {{getProfileName currentUser._id}}</span>
+            </div>
+        {{/if}}
+    </div>
 </template>

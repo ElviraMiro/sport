@@ -2,7 +2,13 @@ getProfileName = function(uId) {
 	var userProfile = UserProfiles.findOne({userId: uId}),
 		user = Meteor.users.findOne(uId);
 	if (userProfile && userProfile.surname) {
-		return userProfile.surname + " " + userProfile.firstName + " " + userProfile.secondName;
+		var name1 = userProfile.surname,
+			name2 = userProfile.firstName,
+			name3 = userProfile.secondName;
+		if (!name1) name1 = "";
+		if (!name2) name2 = "";
+		if (!name3) name3 = "";
+		return name1.concat(" ", name2, " ", name3);
 	} else {
 		return user.emails[0].address;
 	}
@@ -11,7 +17,13 @@ getProfileName = function(uId) {
 getUserName = function(uId) {
 	var userProfile = UserProfiles.findOne({userId: uId});
 	if (userProfile && userProfile.surname) {
-		return userProfile.surname + " " + userProfile.firstName + " " + userProfile.secondName;
+		var name1 = userProfile.surname,
+			name2 = userProfile.firstName,
+			name3 = userProfile.secondName;
+		if (!name1) name1 = "";
+		if (!name2) name2 = "";
+		if (!name3) name3 = "";
+		return name1.concat(" ", name2, " ", name3);
 	} else {
 		return "Не заповнено користувачем";
 	}

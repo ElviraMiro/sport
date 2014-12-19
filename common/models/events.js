@@ -23,11 +23,6 @@ var EventSchema = new SimpleSchema({
 		label: 'Місце проведення',
 		max: 50
 	},
-	regionId: {
-		type: String,
-		label: 'Регіон/населений пункт',
-		max: 50
-	},
 	description: {
 		type: String,
 		label: 'Опис події',
@@ -73,13 +68,9 @@ var EventGroupSchema = new SimpleSchema({
 		label: 'Місце проведення',
 		max: 50
 	},
-	regionId: {
+	federationId: {
 		type: String,
-		label: 'Регіон/населений пункт',
 		max: 50
-	},
-	federationIds: {
-		type: [String]
 	}
 });
 

@@ -35,6 +35,10 @@ var UserProfileSchema = new SimpleSchema({
 		label: "Адреса",
 		max: 250,
 		optional: true
+	},
+	addition: {
+		type: Object,
+		optional: true
 	}
 });
 

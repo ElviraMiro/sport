@@ -72,5 +72,11 @@ Router.map(function () {
 });
 
 if (Meteor.isClient) {
-  Router.onBeforeAction('loading');
+  Router.onBeforeAction(function() {
+    if (! Meteor.userId()) {
+      this.render('notSign');
+    } else {
+      this.next();
+    }
+  });
 }

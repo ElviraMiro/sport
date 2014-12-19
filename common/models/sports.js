@@ -25,7 +25,6 @@ var QualificationSchema = new SimpleSchema({
 	},
 	sportId: {
 		type: String,
-		label: 'Назва оцінки',
 		max: 50,
 		optional: true
 	},
@@ -47,9 +46,13 @@ var QualificationSchema = new SimpleSchema({
 Qualifications.attachSchema(QualificationSchema);
 
 Qualifications.before.insert(function(userId, doc) {
-	var federation = Federations.findOne(doc.federationId),
-		sport = Sports.findOne(federation.sportId);
-	doc.sportId = sport._id;
+	var federation = Federations.findOne(doc.federationId);
+	if (federation) {
+		var sport = Sports.findOne(federation.sportId);
+		if (sport) {
+			doc.sportId = sport._id;
+		}
+	}
 });
 
 
@@ -62,18 +65,32 @@ var ValueSchema = new SimpleSchema({
 	},
 	qualification: {
 		type: String,
-		max: 200
+		max: 200,
+		optional: true
 	},
 	eventId: {
 		type: String,
-		max: 50
+		max: 50,
+		optional: true
 	},
-	autorId: {
+	authorId: {
 		type: String,
 		max: 50
 	},
 	destionationId: {
 		type: String,
 		max: 50
+	}
+});
+
+Values.attachSchema(ValueSchema);
+
+Values.before.insert(function(userId, doc) {
+	var qualificationId = doc.qualificationId;
+	if (qualificationId) {
+		var qualification = Qualifications.findOne(qualificationId);
+		if (qualification) {
+			doc.qualification = qualification.title;
+		}
 	}
 });

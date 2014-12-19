@@ -7,6 +7,10 @@ Template.profile.helpers({
 	},
 	userId: function() {
 		return Session.get("selectedUserId");
+	},
+	profile: function() {
+		var profile = UserProfiles.findOne({userId: Meteor.userId()})
+		return profile;
 	}
 });
 
@@ -33,5 +37,17 @@ Template.profile.events({
 				}
 			});
 		}
+	},
+	'click #save': function(e, t) {
+		e.preventDefault();
+		var fn = $("#firstName").val(),
+			sn = $("#secondName").val(),
+			p = $("#surname").val(),
+			phones = $("#phones").val(),
+			profile = UserProfiles.findOne({userId: Meteor.userId()});
+		if (profile) {
+			UserProfiles.update(profile._id, {$set: {firstName: fn, secondName: sn, surname: p, phones: phones}});
+		}
+		return false;
 	}
 });

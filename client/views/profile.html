@@ -1,30 +1,62 @@
 <template name="profile">
-	<div class="container-fluid">
-		<br>
-		<div class="row">
-			<div class="col-xs-3" style="text-align:center;">
-				<img src="{{getAvatarURL userId}}" width="80px" class="img-circle" alt="#" />
-				<br><br>
+	<div class="container sport">
+		<div class="ui grid">
+			<div class="six wide column">
+				<div class="ui card">
+					<div class="image">
+						<img src="{{getAvatarURL userId}}"/>
+					</div>
+					{{#if isMine}}
+						<div class="ui button bottom attached teal changeAvatar">
+							Змінити аватарку
+						</div>
+					{{/if}}
+				</div>
 				<input class="myAvatarInput" type="file" style="width:0;height:0;">
-				<button type="submit" class="btn btn-default changeAvatar">Змінити аватарку</button>
 			</div>
-			<div class="col-xs-9">
-				<table class="table table-condensed table-striped">
-					<tbody>
-						<tr>
-							<td>П.І.Б.</td>
-							<td><b>{{getUserName userId}}</b></td>
-						</tr>
-						<tr>
-							<td>email</td>
-							<td><b>{{getUserEmail userId}}</b></td>
-						</tr>
-						<tr>
-							<td>Телефони</td>
-							<td><b>{{getUserPhone userId}}</b></td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="ten wide column">
+				{{#if isMine}}
+					<form class="ui form">
+						<div class="field">
+							<label>Ім'я</label>
+							<input type="text" class="form-control" id="firstName" value="{{profile.firstName}}">
+						</div>
+						<div class="field">
+							<label>По-батькові</label>
+							<input type="text" class="form-control" id="secondName" value="{{profile.secondName}}">
+						</div>
+						<div class="field">
+							<label>Прізвище</label>
+							<input type="text" class="form-control" id="surname" value="{{profile.surname}}">
+						</div>
+						<div class="field">
+							<label>E-mail</label>
+							<input type="text" class="form-control" id="email" disabled value="{{getUserEmail userId}}">
+						</div>
+						<div class="field">
+							<label>Телефони</label>
+							<input type="text" class="form-control" id="phones" value="{{profiles.phones}}">
+						</div>
+						<button class="ui button teal" id="save">Зберегти</button>
+					</form>
+				{{else}}
+					<table class="ui table striped">
+						<tbody>
+							<tr>
+								<td>П.І.Б.</td>
+								<td><b>{{getUserName userId}}</b></td>
+							</tr>
+							<tr>
+								<td>email</td>
+								<td><b>{{getUserEmail userId}}</b></td>
+							</tr>
+							<tr>
+								<td>Телефони</td>
+								<td><b>{{getUserPhone userId}}</b></td>
+							</tr>
+						</tbody>
+					</table>
+				{{/if}}
 			</div>
 		</div>
 	</div>

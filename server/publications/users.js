@@ -3,7 +3,7 @@ Meteor.publish('myAccount', function() {
 });
 
 Meteor.publish("userProfile", function(uId) {
-	return UserProfiles.find({_id: uId});
+	return UserProfiles.find({userId: uId});
 });
 
 Meteor.publish("userAvatar", function(uId) {

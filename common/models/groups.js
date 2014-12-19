@@ -38,5 +38,7 @@ Groups.attachSchema(GroupSchema);
 
 Groups.before.insert(function(userId, doc) {
   var federation = Federations.findOne(doc.federationId);
-  doc.sportId = federation.sportId;
+  if (federation) {
+    doc.sportId = federation.sportId;
+  }
 });

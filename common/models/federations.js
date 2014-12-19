@@ -23,9 +23,8 @@ var FederationSchema = new SimpleSchema({
     label: "Перелік користувачів",
     optional: true
   },
-  regionId: {
+  locationId: {
     type: String,
-    label: "Регіон/населений пункт",
     max: 50
   },
   sportId: {
