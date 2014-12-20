@@ -25,6 +25,10 @@ Template.leftnav.helpers({
 		}
 	},
 	isAdmin: function() {
+		var profile = UserProfiles.findOne({userId: Meteor.userId()});
+		if (profile && profile.addition && profile.addition.admin) {
+			return "";
+		}
 		return "hidden";
 	}
 });
