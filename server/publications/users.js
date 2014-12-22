@@ -1,5 +1,6 @@
 Meteor.publish('myAccount', function() {
-	return Meteor.users.find(this.userId);
+	return [UserProfiles.find({userId: this.userId}),
+		Avatars.find({"metadata.owner": this.userId})];
 });
 
 Meteor.publish("userProfile", function(uId) {

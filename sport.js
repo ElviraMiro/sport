@@ -1,5 +1,6 @@
 if (Meteor.isClient) {
 	Meteor.subscribe('userPresence');
+	Meteor.subscribe('myAccount');
 	toastr.options = {
 		"closeButton": true,
 		"debug": false,
