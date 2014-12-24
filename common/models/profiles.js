@@ -1,3 +1,5 @@
+UserRoles = new Meteor.Collection("userroles");
+
 UserProfiles = new Meteor.Collection("userprofiles");
 
 var UserProfileSchema = new SimpleSchema({
@@ -34,10 +36,6 @@ var UserProfileSchema = new SimpleSchema({
 		type: String,
 		label: "Адреса",
 		max: 250,
-		optional: true
-	},
-	addition: {
-		type: Object,
 		optional: true
 	}
 });

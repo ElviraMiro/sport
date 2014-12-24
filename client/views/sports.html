@@ -1,13 +1,16 @@
 <template name="sports">
-	<div class="container-fluid">
+	<div class="container sport">
 		<h4>Перелік видів спорту</h4>
-		<table class="table table-condensed table-striped">
+		<table class="ui table striped">
 			<thead>
-				<th>
-					<button class="btn btn-primary addSport"><i class="fa fa-plus"></i></button>
-					Назва виду спорту
-				</th>
-				<th></th>
+				<tr>
+					<th>
+						Назва виду спорту
+					</th>
+					<th>
+						<button class="ui button teal pull-right addSport"><i class="fa fa-plus"></i></button>
+					</th>
+				</tr>
 			</thead>
 			<tbody>
 				{{#if sports.count}}
@@ -17,10 +20,10 @@
 								{{title}}
 							</td>
 							<td>
-								<div class="btn-group pull-right" role="group">
-									<button class="btn btn-default editSport"><i class="fa fa-pencil"></i></button>
-									<button class="btn btn-danger removeSport"><i class="fa fa-trash-o"></i></button>
-									<button class="btn btn-default editSportTeam"><i class="fa fa-users"></i></button>
+								<div class="ui buttons pull-right">
+									<button class="ui button editSport"><i class="fa fa-pencil"></i></button>
+									<button class="ui button blue editSportTeam"><i class="fa fa-users"></i></button>
+									<button class="ui button red removeSport"><i class="fa fa-trash-o"></i></button>
 								</div>
 							</td>
 						</tr>
@@ -31,7 +34,6 @@
 			</tbody>
 		</table>
 	</div>
-	{{> modalSport}}
 </template>
 
 <template name="modalSport">

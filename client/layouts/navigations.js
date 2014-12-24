@@ -1,15 +1,3 @@
-Template.topnav.helpers({
-	isAdmin: function() {
-		var user = Meteor.user();
-		if (user) {
-			if (Roles.userIsInRole(user, "admin", Roles.GLOBAL_GROUP)) {
-				return true;
-			}
-		}
-		return false;
-	}
-});
-
 Template.topnav.rendered = function() {
 	$('.leftnav').first().sidebar('attach events', '.toggleLeftnav');
 	$('.toggleLeftnav').removeClass('disabled');
@@ -25,8 +13,8 @@ Template.leftnav.helpers({
 		}
 	},
 	isAdmin: function() {
-		var profile = UserProfiles.findOne({userId: Meteor.userId()});
-		if (profile && profile.addition && profile.addition.admin) {
+		var roles = UserRoles.findOne(Meteor.userId());
+		if (roles && roles.admin) {
 			return "";
 		}
 		return "hidden";

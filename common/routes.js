@@ -1,7 +1,8 @@
 Router.configure({
   notFoundTemplate: 'notFound',
   layoutTemplate: 'layout',
-  loadingTemplate: 'loading'
+  loadingTemplate: 'loading',
+  progressSpinner: true
 });
 
 Router.map(function () {

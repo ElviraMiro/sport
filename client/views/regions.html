@@ -1,26 +1,31 @@
 <template name="regions">
-	<div class="container-fluid">
+	<div class="container sport">
 		<h4>Перелік регіонів/населених пунктів</h4>
-		<table class="table table-condensed table-striped">
+		<table class="ui table striped">
 			<thead>
-				<th>
-					<button class="btn btn-primary addRegion"><i class="fa fa-plus"></i></button>
-					Назва регіону/населеного пункту
-				</th>
-				<th></th>
+				<tr>
+					<th>
+						Назва регіону/населеного пункту
+					</th>
+					<th>
+						<button class="ui button teal addRegion pull-right"><i class="fa fa-plus"></i></button>
+					</th>
+				</tr>
 			</thead>
 			<tbody>
 				{{#if regions}}
 					{{#each regions}}
 						<tr>
-							<td style="padding-left:{{padding}}0px">
-								{{region.title}}
+							<td>
+								<span style="padding-left:{{padding}}0px">
+									{{region.title}}
+								</span>
 							</td>
 							<td>
-								<div class="btn-group pull-right" role="group">
-									<button class="btn btn-primary addRegion"><i class="fa fa-plus"></i></button>
-									<button class="btn btn-default editRegion"><i class="fa fa-pencil"></i></button>
-									<button class="btn btn-danger removeRegion"><i class="fa fa-trash-o"></i></button>
+								<div class="ui buttons pull-right">
+									<button class="ui button teal addRegion"><i class="fa fa-plus"></i></button>
+									<button class="ui button editRegion"><i class="fa fa-pencil"></i></button>
+									<button class="ui button red removeRegion"><i class="fa fa-trash-o"></i></button>
 								</div>
 							</td>
 						</tr>
@@ -31,36 +36,54 @@
 			</tbody>
 		</table>
 	</div>
-	{{> modalRegion}}
 </template>
 
 <template name="modalRegion">
-	<div class="modal fade" id="modalRegion">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title">{{modalTitle}}</h4>
-				</div>
-				<div class="modal-body">
-					{{#with editRegion}}
-						{{#if parent}}
-							<div class="form-group">
-								<label for="parent">Батьківський регіон/населений пункт</label>
-								<input type="text" class="form-control" id="parent" value="{{parent}}" readonly>
-							</div>
-						{{/if}}
-						<div class="form-group">
-							<label for="title">Назва регіона/населеного пункта</label>
-							<input type="text" class="form-control" id="title" value="{{title}}">
+	<i class="close icon cancel"></i>
+	<div class="header">
+		{{modalTitle}}
+	</div>
+	<div class="content">
+		<div class="description">
+			{{#with editRegion}}
+				<div class="ui form">
+					{{#if parent}}
+						<div class="field">
+							<label for="parent">Батьківський регіон/населений пункт</label>
+							<input type="text" id="parent" value="{{parent}}" readonly>
 						</div>
-					{{/with}}
+					{{/if}}
+					<div class="field">
+						<label for="title">Назва регіона/населеного пункта</label>
+						<input type="text" id="title" value="{{title}}">
+					</div>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Закрити</button>
-					<button type="button" class="btn btn-primary saveRegion">Зберігти</button>
-				</div>
-			</div>
+			{{/with}}
 		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button cancel">Cancel</div>
+		<div class="ui button teal saveRegion">OK</div>
+	</div>
+</template>
+
+<template name="modalDeleteRegion">
+	<i class="close icon cancel"></i>
+	<div class="header red">
+		Видалити регіон/населений пункт
+	</div>
+	<div class="content red">
+		<div class="description">
+			<p>
+				Чи дійсно бажаєте видалити регіон/населений пункт
+			</p>
+			<p>
+				{{deleteRegion}}
+			</p>
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button cancel">Cancel</div>
+		<div class="ui button red deleteRegion">OK</div>
 	</div>
 </template>
