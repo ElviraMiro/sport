@@ -1,5 +1,5 @@
 getProfileName = function(uId) {
-	var userProfile = UserProfiles.findOne({userId: uId}),
+	var userProfile = UserProfiles.findOne(uId),
 		user = Meteor.users.findOne(uId);
 	if (userProfile && userProfile.surname) {
 		var name1 = userProfile.surname,
@@ -15,7 +15,7 @@ getProfileName = function(uId) {
 };
 
 getUserName = function(uId) {
-	var userProfile = UserProfiles.findOne({userId: uId});
+	var userProfile = UserProfiles.findOne(uId);
 	if (userProfile && userProfile.surname) {
 		var name1 = userProfile.surname,
 			name2 = userProfile.firstName,
@@ -35,7 +35,7 @@ getUserEmail = function(uId) {
 };
 
 getUserPhone = function(uId) {
-	var userProfile = UserProfiles.findOne({userId: uId});
+	var userProfile = UserProfiles.findOne(uId);
 	if (userProfile && userProfile.phones) {
 		return userProfile.phones;
 	} else {
@@ -60,8 +60,8 @@ removeFromArray = function(array, value) {
 	return array;
 };
 
-userIsInContactInFederations = function(uId) {
-	var federations = Federations.find({contactIds: uId}).fetch(),
+userIsInUsersInFederations = function(uId) {
+	var federations = Federations.find({userIds: uId}).fetch(),
 		result = [];
 	for (var i=0; i<federations.length; i++) {
 		result.push(federations[i]._id);
@@ -178,6 +178,27 @@ getRegionsHierarchy = function() {
 	for (var i=0; i<regions.length; i++) {
 		result.push({region: regions[i], padding: padding});
 		addDownRegionsInHierarchy(regions[i], padding+1, result);
+	}
+	return result;
+};
+
+addDownFederationsInHierarchy = function(federation, padding, result) {
+	var federations = Federations.find({parentId: federation._id}).fetch();
+	for (var i=0; i<federations.length; i++) {
+		result.push({federation: federations[i], padding: padding});
+		if (federations[i].parentId) {
+			addDownFederationsInHierarchy(federations[i], padding+1, result);
+		}
+	}
+};
+
+getFederationsHierarchy = function(sportId) {
+	var federations = Federations.find({parentId: null, sportId: sportId}).fetch(),
+		padding = 0,
+		result = [];
+	for (var i=0; i<federations.length; i++) {
+		result.push({federation: federations[i], padding: padding});
+		addDownFederationsInHierarchy(federations[i], padding+1, result);
 	}
 	return result;
 };

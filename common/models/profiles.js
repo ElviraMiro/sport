@@ -3,11 +3,6 @@ UserRoles = new Meteor.Collection("userroles");
 UserProfiles = new Meteor.Collection("userprofiles");
 
 var UserProfileSchema = new SimpleSchema({
-	userId: {
-		type: String,
-		label: 'Посилання на ІД користувача',
-		max: 50
-	},
 	firstName: {
 		type: String,
 		label: "Ім'я",
@@ -37,11 +32,19 @@ var UserProfileSchema = new SimpleSchema({
 		label: "Адреса",
 		max: 250,
 		optional: true
+	},
+	userId: {
+		type: String,
+		max: 50,
+		optional: true
 	}
 });
 
 UserProfiles.attachSchema(UserProfileSchema);
 
+UserProfiles.before.insert(function(userId, doc) {
+	doc._id = doc.userId;
+});
 
 var avatarStore = new FS.Store.GridFS("avatars", {
 	transformWrite:  function(fileObj, readStream, writeStream) {
@@ -61,5 +64,5 @@ Avatars = new FS.Collection("avatars", {
 
 Meteor.users.after.insert(function(userId, doc) {
 	var uId = doc._id;
-	UserProfiles.insert({userId: uId});
+	UserProfiles.insert({_id: uId});
 });

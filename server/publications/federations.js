@@ -13,9 +13,26 @@ Meteor.publish("federationsInSport", function(sId) {
 	return [
 		Sports.find({_id: sId}),
 		Federations.find({sportId: sId}),
-		Meteor.users.find({$or: [{_id: {$in: admins}}, {userId: {$in: contacts}}]}),
-		UserProfiles.find({$or: [{userId: {$in: admins}}, {userId: {$in: contacts}}]}),
-		Avatars.find({$or: [{"metadata.owner": {$in: admins}}, {'metadata.owner': {$in: contacts}}]}),
 		Regions.find()
+	]
+});
+
+Meteor.publish("federation", function(fId) {
+	var federation = Federations.findOne(fId),
+		admins = [],
+		contacts = [];
+	if (federation.admins) {
+		admins = federation.admins;
+	}
+	if (federation.contacts) {
+		contacts = federation.contacts;
+	}
+	return [
+		Sports.find({_id: federation.sportId}),
+		Federations.find({$or: [{_id: fId}, {_id: federation.parentId}]}),
+		Meteor.users.find({$or: [{_id: {$in: admins}}, {_id: {$in: contacts}}]}),
+		UserProfiles.find({$or: [{_id: {$in: admins}}, {_id: {$in: contacts}}]}),
+		Avatars.find({$or: [{"metadata.owner": {$in: admins}}, {'metadata.owner': {$in: contacts}}, {'metadata.owner': fId}]}),
+		Regions.find({_id: federation.locationId})
 	]
 });

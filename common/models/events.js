@@ -5,6 +5,11 @@ var EventTypeSchema = new SimpleSchema({
 		type: String,
 		label: 'Вид події',
 		max: 200
+	},
+	ownerId: {
+		type: String,
+		max: 50,
+		optional: true
 	}
 });
 
@@ -21,7 +26,16 @@ var EventSchema = new SimpleSchema({
 	locationId: {
 		type: String,
 		label: 'Місце проведення',
-		max: 50
+		max: 50,
+		optional: true
+	},
+	startedAt: {
+		type: Date,
+		label: 'Дата та час початку'
+	},
+	finishedAt: {
+		type: Date,
+		label: 'Дата та час закінчення'
 	},
 	description: {
 		type: String,
@@ -41,6 +55,15 @@ var EventSchema = new SimpleSchema({
 		type: [String],
 		label: 'Учасники',
 		optional: true
+	},
+	authorId: {
+		type: String,
+		max: 50,
+		autoValue: function() {
+			if (this.isInsert) {
+				return this.userId;
+			}
+		}
 	}
 });
 
@@ -61,6 +84,16 @@ var EventGroupSchema = new SimpleSchema({
 	},
 	eventIds: {
 		type: [String],
+		optional: true
+	},
+	startedAt: {
+		type: Date,
+		label: 'Дата та час початку',
+		optional: true
+	},
+	finishedAt: {
+		type: Date,
+		label: 'Дата та час закінчення',
 		optional: true
 	},
 	locationId: {

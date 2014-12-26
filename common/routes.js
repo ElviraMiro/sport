@@ -13,7 +13,7 @@ Router.map(function () {
     layoutTemplate: 'layout',
     loadingTemplate: 'loading',
     waitOn: function () {
-      return [];
+      return [Meteor.subscribe("eventsForUser")];
     }
   });
 
@@ -67,6 +67,18 @@ Router.map(function () {
     waitOn: function () {
       Session.set("selectedSportId", this.params.id);
       return [Meteor.subscribe("federationsInSport", Session.get("selectedSportId"))];
+    }
+  });
+
+  this.route('federation', {
+    path: '/sport/:sportId/federation/:federationId', 
+    template: 'federation',
+    layoutTemplate: 'layout',
+    loadingTemplate: 'loading',
+    waitOn: function () {
+      Session.set("selectedSportId", this.params.sportId);
+      Session.set("selectedFederationId", this.params.federationId);
+      return [Meteor.subscribe("federation", Session.get("selectedFederationId"))];
     }
   });
 

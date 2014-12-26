@@ -1,5 +1,57 @@
 <template name="start">
-    <div class="container sport">
-        Ласкаво просимо
-    </div>
+	<div class="container sport">
+		{{ > ReactiveFullcalendar options=calendarOptions }}
+	</div>
+</template>
+
+<template name="modalAddEvent">
+	<i class="close icon cancel"></i>
+	<div class="header">
+		Додати подію
+	</div>
+	<div class="content">
+		<div class="description">
+			<div class="ui form">
+				<div class="two fields">
+					<div class="field">
+						<label for="type">Тип події</label>
+						<select id="eventType" class="ui dropdown">
+							<option value="0">Оберіть тип події</option>
+							{{#each eventTypes}}
+								<option value="{{_id}}">{{title}}</option>
+							{{/each}}
+						</select>
+					</div>
+					<div class="field">
+						<label for="type">Додати новий тип події</label>
+						<div class="ui icon input">
+							<input type="text" id="eventTypeNew" value="">
+							<i class="close icon eraseType"></i>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<label for="type">Місце проведення</label>
+					<select id="location" class="ui dropdown">
+						<option value="0">Оберіть місце проведення</option>
+						{{#each locations}}
+							<option value="{{_id}}">{{title}}</option>
+						{{/each}}
+					</select>
+				</div>
+				<div class="field">
+					<label for="start">Початок події</label>
+					<input type="date" id="start" value="{{start}}">
+				</div>
+				<div class="field">
+					<label for="end">Кінець події</label>
+					<input type="date" id="end" value="{{end}}">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button cancel">Cancel</div>
+		<div class="ui button teal saveEvent">OK</div>
+	</div>
 </template>

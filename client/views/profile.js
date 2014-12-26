@@ -2,6 +2,11 @@ Template.profile.helpers({
 	isMine: function() {
 		if (Session.get("selectedUserId") == Meteor.userId()) {
 			return true;
+		} else {
+			var roles = UserRoles.findOne(Meteor.userId());
+			if (roles && (roles.admin)) {
+				return true;
+			}
 		}
 		return false;
 	},
@@ -9,7 +14,7 @@ Template.profile.helpers({
 		return Session.get("selectedUserId");
 	},
 	profile: function() {
-		var profile = UserProfiles.findOne({userId: Meteor.userId()})
+		var profile = UserProfiles.findOne(Meteor.userId())
 		return profile;
 	}
 });
@@ -43,10 +48,29 @@ Template.profile.events({
 		var fn = $("#firstName").val(),
 			sn = $("#secondName").val(),
 			p = $("#surname").val(),
-			phones = $("#phones").val(),
-			profile = UserProfiles.findOne({userId: Meteor.userId()});
-		if (profile) {
-			UserProfiles.update(profile._id, {$set: {firstName: fn, secondName: sn, surname: p, phones: phones}});
+			phones = $("#phones").val();
+		if (UserProfiles.findOne(Session.get("selectedUserId"))) {
+			UserProfiles.update(Session.get("selectedUserId"), {$set: {firstName: fn, secondName: sn, surname: p, phones: phones}}, function(err){
+				if (!err) {
+					toastr.success("Дані збережено", "", 500);
+				} else {
+					toastr.error("Дані не збережено", "", 500);
+				}
+			});
+		} else {
+			UserProfiles.insert({
+				userId: Session.get("selectedUserId"),
+				firstName: fn,
+				secondName: sn,
+				surname: p,
+				phones: phones
+			}, function(err, id) {
+				if (!err) {
+					toastr.success("Дані збережено", "", 500);
+				} else {
+					toastr.error("Дані не збережено", "", 500);
+				}
+			});
 		}
 		return false;
 	}

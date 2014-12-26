@@ -37,26 +37,45 @@
 </template>
 
 <template name="modalSport">
-	<div class="modal fade" id="modalSport">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title">{{modalTitle}}</h4>
+	<i class="close icon cancel"></i>
+	<div class="header">
+		{{modalTitle}}
+	</div>
+	<div class="content">
+		<div class="description">
+			{{#with editSport}}
+				<div class="ui form">
+					<div class="field">
+						<label for="title">Назва виду спорту</label>
+						<input type="text" id="title" value="{{title}}">
+					</div>
 				</div>
-				<div class="modal-body">
-					{{#with editSport}}
-						<div class="form-group">
-							<label for="title">Назва виду спорту</label>
-							<input type="text" class="form-control" id="title" value="{{title}}">
-						</div>
-					{{/with}}
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Закрити</button>
-					<button type="button" class="btn btn-primary saveSport">Зберігти</button>
-				</div>
-			</div>
+			{{/with}}
 		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button cancel">Cancel</div>
+		<div class="ui button teal saveSport">OK</div>
+	</div>
+</template>
+
+<template name="modalDeleteSport">
+	<i class="close icon cancel"></i>
+	<div class="header red">
+		Видалити вид спорту
+	</div>
+	<div class="content">
+		<div class="description">
+			<p>
+				Чи дійсно бажаєте видалити вид спорту
+			</p>
+			<p>
+				{{deleteSport}}
+			</p>
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button cancel">Cancel</div>
+		<div class="ui button red deleteSport">OK</div>
 	</div>
 </template>

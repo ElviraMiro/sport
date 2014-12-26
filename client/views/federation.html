@@ -1,0 +1,127 @@
+<template name="federation">
+	<div class="container sport">
+		<div class="ui grid">
+			<div class="four wide column">
+				<div class="ui card">
+					<div class="image">
+						<img src="{{getAvatarURL federation._id}}"/>
+					</div>
+					{{#if isAdmin}}
+						<div class="ui button bottom attached teal changeAvatar">
+							Змінити аватарку
+						</div>
+					{{/if}}
+				</div>
+				<input class="myAvatarInput" type="file" style="width:0;height:0;">
+			</div>
+			<div class="twelve wide column">
+				<h3>{{federation.title}}</h3>
+				<h5>
+					<p>
+						{{location.title}}
+					</p>
+					{{#if parent}}
+						<p>
+							<i>Головне об'єднання</i>: {{parent.title}}
+						</p>
+					{{/if}}
+				</h5>
+				{{#if isAdmin}}
+					<div class="ui form">
+						<div class="field">
+							<label>Адреса</label>
+							<textarea id="address" rows="3">{{federation.address}}</textarea>
+						</div>
+						<div class="field">
+							<label>Телефони</label>
+							<input id="phones" value="{{federation.phones}}">
+						</div>
+
+					</div>
+				{{/if}}
+				<div class="ui cards">
+					{{#each federation.contacts}}
+						<div class="ui card">
+							<div class="content">
+								<div class="header">
+									<span class="text"><img src="{{getAvatarURL profileId}}" class="ui image avatar" style="height:15px;width:15px"> {{getProfileName profileId}}</span>
+								</div>
+								<div class="meta">
+									<span class="category">
+										{{position}}
+									</span>
+								</div>
+								<div class="description">
+									<p>
+										{{get}}
+									</p>
+								</div>
+							</div>
+						</div>
+					{{/each}}
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<!--template name="modalFederation">
+	<i class="close icon cancel"></i>
+	<div class="header">
+		<p>{{modalTitle}}</p>
+	</div>
+	<div class="content">
+		<div class="description">
+			{{#with editFederation}}
+				<div class="ui form">
+					<div class="ui field">
+						<label for="title">В регіоні/населеному пункті</label>
+						<select id="region" class="ui dropdown">
+							{{#each regions}}
+								<option value="{{_id}}" {{isSelRegion}}>{{title}}</option>
+							{{/each}}
+						</select>
+					</div>
+					<div class="ui field">
+						<label for="title">Назва спортивного об'єднання</label>
+						<input type="text" id="title" value="{{title}}">
+					</div>
+					<div class="ui field">
+						<label for="title">Головне об'єднання</label>
+						<select id="parent" class="ui dropdown">
+							<option value="0" {{isSelParent}}>-</option>
+							{{#each parents}}
+								<option value="{{_id}}" {{isSelParent}}>{{title}}</option>
+							{{/each}}
+						</select>
+					</div>
+				</div>
+			{{/with}}
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button cancel">Cancel</div>
+		<div class="ui button teal saveFederation">OK</div>
+	</div>
+</template>
+
+
+<template name="modalDeleteFederation">
+	<i class="close icon cancel"></i>
+	<div class="header">
+		<p>
+			Видалити спортивне об'єднання
+		</p>
+	</div>
+	<div class="content">
+		<div class="description">
+			<p>
+				{{deleteFederation}}
+			</p>
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button cancel">Cancel</div>
+		<div class="ui button red deleteFederation">OK</div>
+	</div>
+</template-->

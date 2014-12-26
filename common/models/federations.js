@@ -6,6 +6,12 @@ var FederationSchema = new SimpleSchema({
     label: "Назва спортивного об'єднання",
     max: 200
   },
+  parentId: {
+    type: String,
+    label: "Головна структура",
+    max: 50,
+    optional: true
+  },
   address: {
     type: String,
     label: "Адреса",
@@ -18,10 +24,24 @@ var FederationSchema = new SimpleSchema({
     max: 200,
     optional: true
   },
-  contactIds: {
+  userIds: {
     type: [String],
     label: "Перелік користувачів",
     optional: true
+  },
+  contacts: {
+    type: [Object],
+    label: "Перелік користувачів",
+    optional: true
+  },
+  'contacts.$.profileId': {
+    type: String,
+    max: 50
+  },
+  'contacts.$.position': {
+    type: String,
+    label: 'Должность',
+    max: 100
   },
   locationId: {
     type: String,
@@ -36,7 +56,24 @@ var FederationSchema = new SimpleSchema({
     type: [String],
     label: 'Адміністратори',
     optional: true
+  },
+  federations: {
+    type: [String],
+    optional: true
   }
 });
 
 Federations.attachSchema(FederationSchema);
+
+Federations.before.insert(function(userId, doc) {
+  var parentId = doc.parentId;
+  if (parentId) {
+    var parent = Federations.findOne(parentId),
+      parents = [parent._id];
+    while (parent && parent.parentId) {
+      parent = Federations.findOne(parent.parentId);
+      parents.push(parent._id);
+    }
+  }
+  doc.federations = parents;
+});

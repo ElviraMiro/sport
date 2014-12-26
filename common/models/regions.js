@@ -49,6 +49,11 @@ var LocationSchema = new SimpleSchema({
 		label: 'Адреса',
 		max: 200,
 		optional: true
+	},
+	ownerId: {
+		type: String,
+		max: 50,
+		optional: true
 	}
 });
 

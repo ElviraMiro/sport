@@ -1,67 +1,95 @@
 <template name="sportfederations">
-	<div class="container-fluid">
+	<div class="container sport">
 		<h4>Перелік спортивних об'єднань</h4>
-		<h5>Вид спорту {{sport.title}}</h5>
-		<table class="table table-condensed table-striped">
+		<h5><i>Вид спорту</i> {{sport.title}}</h5>
+		<table class="ui table striped">
 			<thead>
-				<th>Регіон/населений пункт / Назва спортивного об'єднання</th>
-				<th></th>
+				<tr>
+					<th>Назва спортивного об'єднання</th>
+					<th>
+						<button class="ui button teal pull-right addFederation"><i class="fa fa-plus"></i></button>
+					</th>
+				</tr>
 			</thead>
 			<tbody>
 				{{#each federations}}
-					{{#if region}}
-						<tr>
-							<td>
-								{{region.title}}
-							</td>
-							<td>
-								<button class="btn btn-primary addFederation"><i class="fa fa-plus"></i></button>
-							</td>
-						</tr>
-					{{else}}
-						<tr>
-							<td>
+					<tr>
+						<td>
+							<span style="padding-left:{{padding}}0px">
 								{{federation.title}}
-							</td>
-							<td>
-								<div class="btn-group pull-right" role="group">
-									<button class="btn btn-default editFederation"><i class="fa fa-pencil"></i></button>
-									<button class="btn btn-danger removeFederation"><i class="fa fa-trash-o"></i></button>
-									<button class="btn btn-default editContactsFederation"><i class="fa fa-phone"></i></button>
-									<button class="btn btn-default editAdminsFederation"><i class="fa fa-users"></i></button>
-								</div>
-							</td>
-						</tr>
-					{{/if}}
+							</span>
+						</td>
+						<td>
+							<div class="ui buttons pull-right">
+								<button class="ui button editFederation"><i class="fa fa-pencil"></i></button>
+								<button class="ui button blue lookFederation"><i class="fa fa-eye"></i></button>
+								<button class="ui button red removeFederation"><i class="fa fa-trash-o"></i></button>
+							</div>
+						</td>
+					</tr>
 				{{/each}}
 			</tbody>
 		</table>
 	</div>
-	{{> modalFederation}}
 </template>
 
 <template name="modalFederation">
-	<div class="modal fade" id="modalFederation">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title">{{modalTitle}}</h4>
-					<h4 class="modal-title">в регіоні/населеному пункті {{region}}</h4>
+	<i class="close icon cancel"></i>
+	<div class="header">
+		<p>{{modalTitle}}</p>
+	</div>
+	<div class="content">
+		<div class="description">
+			{{#with editFederation}}
+				<div class="ui form">
+					<div class="ui field">
+						<label for="title">В регіоні/населеному пункті</label>
+						<select id="region" class="ui dropdown">
+							{{#each regions}}
+								<option value="{{_id}}" {{isSelRegion}}>{{title}}</option>
+							{{/each}}
+						</select>
+					</div>
+					<div class="ui field">
+						<label for="title">Назва спортивного об'єднання</label>
+						<input type="text" id="title" value="{{title}}">
+					</div>
+					<div class="ui field">
+						<label for="title">Головне об'єднання</label>
+						<select id="parent" class="ui dropdown">
+							<option value="0" {{isSelParent}}>-----</option>
+							{{#each parents}}
+								<option value="{{_id}}" {{isSelParent}}>{{title}}</option>
+							{{/each}}
+						</select>
+					</div>
 				</div>
-				<div class="modal-body">
-					{{#with editFederation}}
-						<div class="form-group">
-							<label for="title">Назва спортивного об'єднання</label>
-							<input type="text" class="form-control" id="title" value="{{title}}">
-						</div>
-					{{/with}}
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Закрити</button>
-					<button type="button" class="btn btn-primary saveFederation">Зберігти</button>
-				</div>
-			</div>
+			{{/with}}
 		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button cancel">Cancel</div>
+		<div class="ui button teal saveFederation">OK</div>
+	</div>
+</template>
+
+
+<template name="modalDeleteFederation">
+	<i class="close icon cancel"></i>
+	<div class="header">
+		<p>
+			Видалити спортивне об'єднання
+		</p>
+	</div>
+	<div class="content">
+		<div class="description">
+			<p>
+				{{deleteFederation}}
+			</p>
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button cancel">Cancel</div>
+		<div class="ui button red deleteFederation">OK</div>
 	</div>
 </template>

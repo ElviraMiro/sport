@@ -1,22 +1,9 @@
 Session.set("selectedEditFederationId", null);
 Session.set("selectedRegion", null);
 
-getFederationByRegions = function(result, region) {
-	result.push({region: region.region});
-	var federations = Federations.find({sportId: Session.get("selectedSportId"), regionId: region.region._id}, {sort: {title: 1}}).fetch();
-	for (var i=0; i<federations.length; i++) {
-		result.push({federation: federations[i]});
-	}
-	return result;
-}
-
 Template.sportfederations.helpers({
 	federations: function() {
-		var regions = getRegionsHierarchy(),
-			result = [];
-		for (var i=0; i<regions.length; i++) {
-			getFederationByRegions(result, regions[i]);
-		}
+		var result = getFederationsHierarchy(Session.get("selectedSportId"));
 		return result;
 	},
 	sport: function() {
@@ -27,88 +14,149 @@ Template.sportfederations.helpers({
 Template.sportfederations.events({
 	'click .addFederation': function(e, t) {
 		e.preventDefault();
-		Session.set("selectedRegion", this.region);
-		$("#modalFederation").modal("show");
+		Session.set("selectedEditFederationId", null);
+		Session.set("modalWindow", "modalFederation");
+		$(".modalWindow").modal("show");
 	},
 	'click .editFederation': function(e, t) {
 		e.preventDefault();
-		Session.set("selectedEditFederationId", this._id);
-		$("#modalFederation").modal("show");
+		Session.set("selectedEditFederationId", this.federation._id);
+		Session.set("modalWindow", "modalFederation");
+		$(".modalWindow").modal("show");
 	},
 	'click .removeFederation': function(e, t) {
-		var federation = Federations.findOne(this._id);
+		var federation = this.federation;
 		Session.set("deleteModalObject", federation.title);
 		Session.set("deleteModalObjectId", federation._id);
-		deleteCallback = function() {
-			Federations.remove(Session.get("deleteModalObjectId"), function(err) {
-				if (!err) {
-					toastr.success(Session.get("deleteModalObject"), "Об'єкт успішно видалено");
-				} else {
-					toastr.error(Session.get("deleteModalObject"), "Об'єкт не видалено");
-				}
-			});
-		}
-		$("#confirmationDeleteModal").modal("show");
+		Session.set("modalWindow", "modalDeleteFederation");
+		$(".modalWindow").modal("show");
 	},
-	'click .editContactsFederation': function(e, t) {
+	'click .lookFederation': function(e, t) {
 		e.preventDefault();
-		//Router.go("/sport/"+this._id+"/federations");
-	},
-	'click .editAdminsFederation': function(e, t) {
-		e.preventDefault();
-		//Router.go("/sport/"+this._id+"/federations");
+		Router.go("/sport/"+this.federation.sportId+"/federation/"+this.federation._id);
 	}
 });
+
+Template.modalFederation.rendered = function() {
+	$("#region").dropdown();
+	$("#parent").dropdown();
+};
 
 Template.modalFederation.helpers({
 	modalTitle: function() {
 		if (Session.get("selectedEditFederationId")) {
-			return "Редагувати спортивне об'єднання";
+			return "Редагувати об'єднання";
 		} else {
-			return "Додати спортивне об'єднання";
+			return "Додати об'єднання";
 		}
 	},
 	editFederation: function() {
 		if (Session.get("selectedEditFederationId")) {
 			var federation = Federations.findOne(Session.get("selectedEditFederationId"));
-			return {title: federation.title};
+			return federation;
 		} else {
 			return {title: ""};
 		}
 	},
-	region: function() {
-		if (Session.get("selectedRegion")) {
-			return Session.get("selectedRegion").title;
-		} else {
-			return "";
+	regions: function() {
+		return Regions.find({}, {sort: {title: 1}});
+	},
+	isSelRegion: function() {
+		var federationId = Session.get("selectedEditFederationId");
+		if (federationId) {
+			var federation = Federations.findOne(federationId);
+			if (this._id == federation.locationId) {
+				return "selected";
+			}
 		}
+		return "";
+	},
+	parents: function() {
+		var federation = Session.get("selectedEditFederationId");
+		if (federation) {
+			return Federations.find({_id: {$ne: federation}}, {sort: {title: 1}});
+		} else {
+			return Federations.find({}, {sort: {title: 1}});
+		}
+	},
+	isSelParent: function() {
+		var federationId = Session.get("selectedEditFederationId");
+		if (federationId) {
+			var federation = Federations.findOne(federationId);
+			if (federation.parentId && (this._id == federation.parentId)) {
+				return "selected";
+			}
+		}
+		return "";
 	}
 });
 
 Template.modalFederation.events({
 	'click .saveFederation': function(e, t) {
-		var title = $("#title").val();
+		var title = $("#title").val()
+			region = $("#region option:selected").val(),
+			parent = $("#parent option:selected").val();
+		if (parent == "0") {
+			parent = null;
+		};
 		if (Session.get("selectedEditFederationId")) {
-			Federations.update(Session.get("selectedEditFederationId"), {$set: {title: title}}, function(err) {
+			Federations.update(Session.get("selectedEditFederationId"), {$set: {title: title, locationId: region, parentId: parent}}, function(err) {
+				console.log(err);
 				if (!err) {
-					toastr.success(title, "Об'єкт успішно збережено");
+					toastr.success(title, "Об'єкт успішно збережено", 1000);
 				} else {
-					toastr.error(title, "Об'єкт не збережено");
+					toastr.error(title, "Об'єкт не збережено", 1000);
 				}
 			});
 		} else {
 			Federations.insert({title: title,
-				regionId: Session.get("selectedRegion")._id,
-				sportId: Session.get("selectedSportId")
+				locationId: region,
+				sportId: Session.get("selectedSportId"),
+				parentId: parent
 			}, function(err) {
+				console.log(err);
 				if (!err) {
-					toastr.success(title, "Об'єкт успішно збережено");
+					toastr.success(title, "Об'єкт успішно збережено", 1000);
 				} else {
-					toastr.error(title, "Об'єкт не збережено");
+					toastr.error(title, "Об'єкт не збережено", 1000);
 				}
 			});
 		}
 		Session.set("selectedEditFederationId", null);
-		$("#modalFederation").modal("hide");
+		Session.set("modalWindow", null);
+		$(".modalWindow").modal("hide");
+	},
+	'click .cancel': function(e, t) {
+		Session.set("selectedEditFederationId", null);
+		Session.set("modalWindow", null);
+		$(".modalWindow").modal("hide");
+	}
+});
+
+Template.modalDeleteFederation.helpers({
+	deleteFederation: function() {
+		return Session.get("deleteModalObject");
+	}
+});
+
+Template.modalDeleteFederation.events({
+	'click .deleteFederation': function(e, t) {
+		Federations.remove(Session.get("deleteModalObjectId"), function(err) {
+			if (!err) {
+				toastr.success(Session.get("deleteModalObject"), "Об'єкт успішно видалено", 1000);
+			} else {
+				toastr.error(Session.get("deleteModalObject"), "Об'єкт не видалено", 1000);
+			}
+		});
+		Session.set("deleteModalObject", null);
+		Session.set("deleteModalObjectId", null);
+		Session.set("modalWindow", null);
+		$(".modalWindow").modal("hide");
+	},
+	'click .cancel': function(e, t) {
+		Session.set("deleteModalObject", null);
+		Session.set("deleteModalObjectId", null);
+		Session.set("modalWindow", null);
+		$(".modalWindow").modal("hide");
 	}
 });
