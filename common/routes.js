@@ -1,13 +1,12 @@
 Router.configure({
   notFoundTemplate: 'notFound',
   layoutTemplate: 'layout',
-  loadingTemplate: 'loading',
-  progressSpinner: true
+  loadingTemplate: 'loading'
 });
 
 Router.map(function () {
 
-  this.route('start', {
+  this.route('calendar', {
     path: '/', 
     template: 'start',
     layoutTemplate: 'layout',
@@ -87,7 +86,11 @@ Router.map(function () {
 if (Meteor.isClient) {
   Router.onBeforeAction(function() {
     if (! Meteor.userId()) {
-      this.render('notSign');
+      if (Meteor.loggingIn()) {
+        this.render(this.loadingTemplate);
+      } else {
+        this.render('notSign');
+      }
     } else {
       this.next();
     }

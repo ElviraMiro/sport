@@ -31,21 +31,60 @@
 					</div>
 				</div>
 				<div class="field">
-					<label for="type">Місце проведення</label>
-					<select id="location" class="ui dropdown">
-						<option value="0">Оберіть місце проведення</option>
-						{{#each locations}}
-							<option value="{{_id}}">{{title}}</option>
-						{{/each}}
-					</select>
+					<label>Опис події</label>
+					<textarea id="description">{{description}}</textarea>
 				</div>
-				<div class="field">
-					<label for="start">Початок події</label>
-					<input type="date" id="start" value="{{start}}">
+				<div class="fields">
+					<div class="ten wide field">
+						<label for="start">Початок події</label>
+						<input type="date" id="start" value="{{start}}">
+					</div>
+					<div class="three wide field">
+						<label for="startHour">Годин</label>
+						<input type="text" id="startHour" value="{{startHour}}">
+					</div>
+					<div class="three wide field">
+						<label for="startMinute">Хвилин</label>
+						<input type="text" id="startMinute" value="{{startMinute}}">
+					</div>
 				</div>
-				<div class="field">
-					<label for="end">Кінець події</label>
-					<input type="date" id="end" value="{{end}}">
+				<div class="fields">
+					<div class="ten wide field">
+						<label for="end">Кінець події</label>
+						<input type="date" id="end" value="{{end}}">
+					</div>
+					<div class="three wide field">
+						<label for="endHour">Годин</label>
+						<input type="text" id="endHour" value="{{endHour}}">
+					</div>
+					<div class="three wide field">
+						<label for="endMinute">Хвилин</label>
+						<input type="text" id="endMinute" value="{{endMinute}}">
+					</div>
+				</div>
+				<div class="two fields">
+					<div class="field">
+						<label for="type">Місце проведення</label>
+						<select id="location" class="ui dropdown">
+							<option value="0">Оберіть місце проведення</option>
+							{{#each locations}}
+								<option value="{{_id}}">{{title}}</option>
+							{{/each}}
+						</select>
+					</div>
+					<div class="field">
+						<label for="type">Додати нове місце</label>
+						<div class="ui icon input">
+							<input type="text" id="locationNew" value="">
+							<i class="close icon eraseLocation"></i>
+						</div>
+					</div>
+				</div>
+				<div class="inline field">
+					<div class="ui toggle checkbox">
+						<input type="checkbox" id="forGroup" value="">
+						<label>Визначити учасників</label>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -4,7 +4,6 @@
 # but you can also edit it by hand.
 
 meteor-platform
-insecure
 iron:router
 accounts-base
 accounts-password
@@ -14,7 +13,6 @@ zimme:collection-timestampable
 cfs:graphicsmagick
 aldeed:collection2
 aldeed:autoform
-alanning:roles
 cfs:gridfs
 cfs:standard-packages
 email
@@ -23,9 +21,9 @@ chrismbeckett:fontawesome4
 nooitaf:semantic-ui
 jameslefrere:autoform-semantic-ui
 useraccounts:semantic-ui
-multiply:iron-router-progress
 ground:db
 zimme:collection-softremovable
 reywood:publish-composite
 
 gquemart:meteor-reactive-fullcalendar
+mrt:moment

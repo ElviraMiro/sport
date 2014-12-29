@@ -40,20 +40,9 @@ var LocationSchema = new SimpleSchema({
 		label: 'Назва місця',
 		max: 200
 	},
-	regionId: {
-		type: String,
-		label: 'Регіон/населений пункт'
-	},
-	address: {
-		type: String,
-		label: 'Адреса',
-		max: 200,
-		optional: true
-	},
 	ownerId: {
 		type: String,
-		max: 50,
-		optional: true
+		max: 50
 	}
 });
 

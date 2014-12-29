@@ -60,14 +60,15 @@ Template.start.helpers({
 Template.modalAddEvent.rendered = function() {
     $("#eventType").dropdown();
     $("#location").dropdown();
+    $('.ui.checkbox').checkbox();
 }
 
 Template.modalAddEvent.helpers({
     'start': function() {
-        return Session.get("selectedDate");
+        return moment(Session.get("selectedDate")).format("YYYY-MM-DD");
     },
     'end': function() {
-        return Session.get("selectedDate");
+        return moment(Session.get("selectedDate")).format("YYYY-MM-DD");
     },
     eventTypes: function() {
         return EventTypes.find({$or: [{ownerId: null}, {ownerId: Meteor.userId()}]});
@@ -86,6 +87,11 @@ Template.modalAddEvent.events({
     'click .eraseType': function(e, t) {
         e.preventDefault();
         $("#eventTypeNew").val("");
+        return false;
+    },
+    'click .eraseLocation': function(e, t) {
+        e.preventDefault();
+        $("#locationNew").val("");
         return false;
     }
 });

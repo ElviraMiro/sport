@@ -16,6 +16,7 @@ if (Meteor.isClient) {
 		"showMethod": "fadeIn",
 		"hideMethod": "fadeOut"
 	}
+	T9n.setLanguage('uk');
 }
 
 if (Meteor.isServer) {
@@ -23,7 +24,7 @@ if (Meteor.isServer) {
 		process.env.MAIL_URL = "smtp://robot@educom.io:6d82ef183c48e95bace@smtp.yandex.ru:465/";
 		var user = Meteor.users.findOne({"emails.address": "karashistka@yandex.ru"});
 		if (user) {
-			Roles.addUsersToRoles(user, "admin", Roles.GLOBAL_GROUP);
+			//Roles.addUsersToRoles(user, "admin", Roles.GLOBAL_GROUP);
 		}
 	});
 }

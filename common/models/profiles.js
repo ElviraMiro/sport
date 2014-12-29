@@ -42,6 +42,18 @@ var UserProfileSchema = new SimpleSchema({
 
 UserProfiles.attachSchema(UserProfileSchema);
 
+UserProfiles.allow({
+	insert: function(userId, doc) {
+		return true;
+	},
+	update: function(userId, doc, fields, modifier) {
+		return true;
+	},
+	remove: function(userId, doc) {
+		return true;
+	}
+});
+
 UserProfiles.before.insert(function(userId, doc) {
 	doc._id = doc.userId;
 });
@@ -52,14 +64,29 @@ var avatarStore = new FS.Store.GridFS("avatars", {
 	},
 	maxTries: 1,
 	filter: {
-	allow: {
-		contentTypes: ['image/*']
-	}
+		allow: {
+			contentTypes: ['image/*']
+		}
 	}
 });
 
 Avatars = new FS.Collection("avatars", {
 	stores: [avatarStore]
+});
+
+Avatars.allow({
+	insert: function(userId, doc) {
+		return true;
+	},
+	update: function(userId, doc, fields, modifier) {
+		return true;
+	},
+	remove: function(userId, doc) {
+		return true;
+	},
+	download:function(){
+		return true;
+	}
 });
 
 Meteor.users.after.insert(function(userId, doc) {
