@@ -1,20 +1,17 @@
-Meteor.publishComposite('eventsForUser', {
-	find: function(uId) {
-		var startWeek = moment(new Date()).startOf('week');
-		startWeek = startWeek.add(-12, "h");
-		//TODO: use userId
-		return Events.find({startedAt: {$gte: startWeek.toDate()}}, {sort: {startedAt: 1}});
-	},
-	children: [
-		{
-			find: function(event) {
-				return EventTypes.find({_id: event.eventTypeId});
-			}
-		},
-		{
-			find: function(event) {
-				return Locations.find({_id: event.locationId});
-			}
-		}
+Meteor.publish('eventsForUser', function() {
+	return [
+		EventTypes.find({ownerId: this.userId}),
+		Locations.find({ownerId: this.userId}),
 	]
+	/*Publish.relations(this, Events.find({startedAt: {$gte: startWeek}}, {sort: {startedAt: 1}}), function(id, doc) {
+		doc.eventType = this.changeParentDoc(EventTypes.find(doc.eventTypeId), function(eventType) {
+			console.log("EVENT TYPE: ", eventType);
+			return eventType.title;
+		});
+		doc.location = this.changeParentDoc(Locations.find(doc.locationId), function(location) {
+			return location.title;
+		});
+	});
+	return this.ready();
+	*/
 });

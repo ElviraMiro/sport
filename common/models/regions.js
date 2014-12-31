@@ -47,3 +47,4 @@ var LocationSchema = new SimpleSchema({
 });
 
 Locations.attachSchema(LocationSchema);
+

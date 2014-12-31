@@ -12,6 +12,10 @@ Router.map(function () {
     layoutTemplate: 'layout',
     loadingTemplate: 'loading',
     waitOn: function () {
+      /*var startWeek = moment(new Date);
+      startWeek = startWeek.startOf("week").add(1, "days");
+      startWeek = startWeek.toDate();
+      Session.set("startWeek", startWeek);*/
       return [Meteor.subscribe("eventsForUser")];
     }
   });
@@ -35,16 +39,6 @@ Router.map(function () {
     loadingTemplate: 'loading',
     waitOn: function () {
       return [Meteor.subscribe("regions")];
-    }
-  });
-
-  this.route('eventtypes', {
-    path: '/eventtypes', 
-    template: 'eventtypes',
-    layoutTemplate: 'layout',
-    loadingTemplate: 'loading',
-    waitOn: function () {
-      return [Meteor.subscribe("eventtypes")];
     }
   });
 

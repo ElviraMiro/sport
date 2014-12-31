@@ -23,7 +23,8 @@ jameslefrere:autoform-semantic-ui
 useraccounts:semantic-ui
 ground:db
 zimme:collection-softremovable
-reywood:publish-composite
 
 gquemart:meteor-reactive-fullcalendar
 mrt:moment
+insecure
+cottz:publish-with-relations

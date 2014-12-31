@@ -15,6 +15,16 @@ var EventTypeSchema = new SimpleSchema({
 
 EventTypes.attachSchema(EventTypeSchema);
 
+EventTypes.allow({
+	insert: function(userId, doc) {
+		if (userId == doc.authorId) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+})
+
 Events = new Meteor.Collection("events");
 
 var EventSchema = new SimpleSchema({
@@ -44,7 +54,8 @@ var EventSchema = new SimpleSchema({
 		optional: true
 	},
 	groupIds: {
-		type: [String]
+		type: [String],
+		optional: true
 	},
 	adminIds: {
 		type: [String],
@@ -68,6 +79,16 @@ var EventSchema = new SimpleSchema({
 });
 
 Events.attachSchema(EventSchema);
+
+Events.allow({
+	insert: function(userId, doc) {
+		if (userId == doc.authorId) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+});
 
 EventGroups = new Meteor.Collection("eventgroups");
 

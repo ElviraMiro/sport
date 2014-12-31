@@ -18,21 +18,12 @@ Template.start.helpers({
             //console.log(end);
             //console.log(timezone);
             var events = [];
-            // Get only events from one document of the Calendars collection
-            // events is a field of the Calendars collection document
-            var userGroups = userIsUserInGroups(Meteor.userId());
-            Events.find({$or: [{userIds: Meteor.userId()}, {adminIds: Meteor.userId()}, {groupIds: {$in: userGroups}}]}).forEach(function(event) {
-                eventDetails = {
-                    id: event._id,
-                    title: event.type,
-                    start: event.startedAt,
-                    end: event.finishedAt,
-                    editable: false,
-                    color: green
-                };
-                events.push(eventDetails);
+            console.log(start.toDate(), end.toDate());
+            Meteor.call("getEvents", start.toDate(), end.toDate(), function(err, events){
+                console.log("ERROR", err);
+                console.log("EVENTS", events);
+                callback(events);
             });
-            callback(events);
         },
         dayClick: function(date, jsEvent, view) {
             Session.set("selectedDate", date.toDate());
@@ -51,14 +42,14 @@ Template.start.helpers({
         // Optional: Additional functions to apply after each reactive events computation
         autoruns: [
             function () {
-                console.log("user defined autorun function executed!");
+                //console.log("user defined autorun function executed!");
             }
         ]
     },
 });
 
 Template.modalAddEvent.rendered = function() {
-    $("#eventType").dropdown();
+    $("#typeSelect").dropdown();
     $("#location").dropdown();
     $('.ui.checkbox').checkbox();
 }
@@ -93,5 +84,70 @@ Template.modalAddEvent.events({
         e.preventDefault();
         $("#locationNew").val("");
         return false;
+    },
+    'click .saveEvent': function(e, t) {
+        var eventData = {
+            type: $("#eventType .text").html(),
+            description: $("#description").val(),
+            start: $("#start").val(),
+            startHour: $("#startHour").val(),
+            startMinute: $("#startMinute").val(),
+            end: $("#start").val(),
+            endHour: $("#endHour").val(),
+            endMinute: $("#endMinute").val(),
+            location: $("#location option:selected").val(),
+            locationNew: $("#locationNew").val(),
+            forGroup: $("#forGroup").is(":checked")
+        };
+        console.log(eventData);
+        return false;
+        if (eventData.newType != "") {
+            var typeId = EventTypes.insert({
+                title: eventData.newType,
+                ownerId: Meteor.userId()
+            });
+        } else {
+            var typeId = eventData.type;
+        }
+        if (eventData.locationNew != "") {
+            var locationId = Locations.insert({
+                title: eventData.locationNew,
+                ownerId: Meteor.userId()
+            });
+        } else {
+            var locationId = eventData.location;
+        };
+        if (eventData.startHour == "") {
+            var sh = "00";
+        } else {
+            var sh = eventData.startHour;
+        };
+        if (eventData.startMinute == "") {
+            var sm = "00";
+        } else {
+            var sm = eventData.startMinute;
+        };
+        if (eventData.endHour == "") {
+            var eh = "23";
+        } else {
+            var eh = eventData.endHour;
+        };
+        if (eventData.endMinute == "") {
+            var em = "59";
+        } else {
+            var em = eventData.endMinute;
+        };
+        var start = eventData.start.split("-");
+        var end = eventData.end.split("-");
+        start = new Date(start[0], (start[1] - 1), start[2], sh, sm);
+        end = new Date(end[0], (end[1] - 1), end[2], eh, em);
+        Events.insert({
+            eventTypeId: typeId,
+            locationId: locationId,
+            startedAt: start,
+            finishedAt: end,
+            description: eventData.description,
+            adminIds: [Meteor.userId()]
+        });
     }
 });
