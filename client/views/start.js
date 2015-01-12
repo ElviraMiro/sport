@@ -6,6 +6,7 @@ Template.start.helpers({
         aspectRatio: 2,
         timezone: "local",
         //hiddenDays: [ 0 ],
+        allDaySlot: false,
         defaultView: "agendaWeek",
         axisFormat: "HH:mm",
         slotDuration: '00:30:00',
@@ -18,12 +19,23 @@ Template.start.helpers({
             //console.log(end);
             //console.log(timezone);
             var events = [];
-            console.log(start.toDate(), end.toDate());
-            Meteor.call("getEvents", start.toDate(), end.toDate(), function(err, events){
-                console.log("ERROR", err);
-                console.log("EVENTS", events);
-                callback(events);
+            Meteor.call("setCalendarData", start.toDate(), end.toDate());
+            var userGroups = userIsUserInGroups(Meteor.userId()),
+                events = [];
+            Events.find().forEach(function(event) {
+                var type = EventTypes.findOne(event.eventTypeId),
+                    location = Locations.findOne(event.locationId);
+                eventDetails = {
+                    id: event._id,
+                    title: type.title,
+                    start: event.startedAt,
+                    end: event.finishedAt,
+                    editable: false,
+                    color: "green"
+                };
+                events.push(eventDetails);
             });
+            callback(events);
         },
         dayClick: function(date, jsEvent, view) {
             Session.set("selectedDate", date.toDate());
@@ -49,9 +61,11 @@ Template.start.helpers({
 });
 
 Template.modalAddEvent.rendered = function() {
-    $("#typeSelect").dropdown();
+    $("#eventType").dropdown();
+    $(".time").dropdown();
     $("#location").dropdown();
     $('.ui.checkbox').checkbox();
+    $('.menu .tabitem').tab();
 }
 
 Template.modalAddEvent.helpers({
@@ -66,6 +80,50 @@ Template.modalAddEvent.helpers({
     },
     locations: function() {
         return Locations.find({ownerId: Meteor.userId()});
+    },
+    startHour: function() {
+        var data = [];
+        for (var i=7; i<23; i++) {
+            if (i < 10) {
+                data.push({name: "0".concat(i)});
+            } else {
+                data.push({name: "".concat(i)});
+            }
+        }
+        return data;
+    },
+    endHour: function() {
+        var data = [];
+        for (var i=7; i<23; i++) {
+            if (i < 10) {
+                data.push({name: "0".concat(i)});
+            } else {
+                data.push({name: "".concat(i)});
+            }
+        }
+        return data;
+    },
+    startMinute: function() {
+        var data = [];
+        for (var i=0; i<=55; i=i+5) {
+            if (i < 10) {
+                data.push({name: "0".concat(i)});
+            } else {
+                data.push({name: "".concat(i)});
+            }
+        }
+        return data;
+    },
+    endMinute: function() {
+        var data = [];
+        for (var i=0; i<=55; i=i+5) {
+            if (i < 10) {
+                data.push({name: "0".concat(i)});
+            } else {
+                data.push({name: "".concat(i)});
+            }
+        }
+        return data;
     }
 });
 
@@ -86,59 +144,62 @@ Template.modalAddEvent.events({
         return false;
     },
     'click .saveEvent': function(e, t) {
+        var typeNew = $("#eventType input.search").val(),
+            locationNew = $("#location input.search").val(),
+            location = "",
+            type = "";
+        if (typeNew == "") {
+            type = $("[name='eventType']").val();
+        }
+        if (locationNew == "") {
+            location = $("[name='location']").val();
+        }
         var eventData = {
-            type: $("#eventType .text").html(),
-            description: $("#description").val(),
-            start: $("#start").val(),
-            startHour: $("#startHour").val(),
-            startMinute: $("#startMinute").val(),
-            end: $("#start").val(),
-            endHour: $("#endHour").val(),
-            endMinute: $("#endMinute").val(),
-            location: $("#location option:selected").val(),
-            locationNew: $("#locationNew").val(),
-            forGroup: $("#forGroup").is(":checked")
-        };
-        console.log(eventData);
-        return false;
-        if (eventData.newType != "") {
-            var typeId = EventTypes.insert({
-                title: eventData.newType,
-                ownerId: Meteor.userId()
-            });
+                type: type,
+                typeNew: typeNew,
+                description: $("#description").val(),
+                start: $("#start").val(),
+                startHour: $("#startHour option:selected").val(),
+                startMinute: $("#startMinute option:selected").val(),
+                end: $("#start").val(),
+                endHour: $("#endHour option:selected").val(),
+                endMinute: $("#endMinute option:selected").val(),
+                location: location,
+                locationNew: locationNew,
+                forGroup: $("#forGroup").is(":checked")
+            };
+        if (eventData.typeNew != "") {
+            var type = EventTypes.findOne({title: eventData.typeNew});
+            if (type) {
+                var typeId = type._id;
+            } else {
+                var typeId = EventTypes.insert({
+                    title: eventData.typeNew,
+                    ownerId: Meteor.userId()
+                });
+            }
         } else {
             var typeId = eventData.type;
         }
         if (eventData.locationNew != "") {
-            var locationId = Locations.insert({
-                title: eventData.locationNew,
-                ownerId: Meteor.userId()
-            });
+            var location = Locations.findOne({title: eventData.locationNew});
+            if (location) {
+                var locationId = location._id;
+            } else {
+                var locationId = Locations.insert({
+                    title: eventData.locationNew,
+                    ownerId: Meteor.userId()
+                });
+            }
         } else {
             var locationId = eventData.location;
         };
-        if (eventData.startHour == "") {
-            var sh = "00";
-        } else {
-            var sh = eventData.startHour;
-        };
-        if (eventData.startMinute == "") {
-            var sm = "00";
-        } else {
-            var sm = eventData.startMinute;
-        };
-        if (eventData.endHour == "") {
-            var eh = "23";
-        } else {
-            var eh = eventData.endHour;
-        };
-        if (eventData.endMinute == "") {
-            var em = "59";
-        } else {
-            var em = eventData.endMinute;
-        };
-        var start = eventData.start.split("-");
-        var end = eventData.end.split("-");
+        var sh = eventData.startHour,
+            sm = eventData.startMinute,
+            eh = eventData.endHour,
+            em = eventData.endMinute,
+            start = eventData.start.split("-"),
+            end = eventData.end.split("-");
         start = new Date(start[0], (start[1] - 1), start[2], sh, sm);
         end = new Date(end[0], (end[1] - 1), end[2], eh, em);
         Events.insert({
@@ -149,5 +210,8 @@ Template.modalAddEvent.events({
             description: eventData.description,
             adminIds: [Meteor.userId()]
         });
+        Session.set("modalWindow", null);
+        Session.set("selectedDate", null);
+        $(".modalWindow").modal("hide");
     }
 });

@@ -11,74 +11,105 @@
 	</div>
 	<div class="content">
 		<div class="description">
-			<form id="addEvent">
-				<div class="ui form">
-					<div class="field" id="eventType">
-						<label>Тип події</label>
-						<select class="ui search selection dropdown" id="typeSelect">
-							{{#each eventTypes}}
-								<option class="item" value="{{_id}}">{{title}}</option>
-							{{/each}}
-						</select>
+			<div class="ui top attached tabular menu">
+				<a class="active item tabitem" data-tab="info">Інформація</a>
+				<a class="item tabitem" data-tab="time">Час події</a>
+				<a class="item tabitem" data-tab="members">Учасники</a>
+			</div>
+			<div class="ui bottom attached active tab segment" data-tab="info">
+				<div class="ui fluid search selection dropdown" id="eventType">
+					<input type="hidden" name="eventType">
+					<i class="dropdown icon"></i>
+					<div class="default text">Тип події</div>
+					<div class="menu">
+						{{#each eventTypes}}
+							<div class="item" data-value="{{_id}}">{{title}}</div>
+						{{/each}}
 					</div>
+				</div>
+				<br>
+				<div class="ui form">
 					<div class="field">
 						<label>Опис події</label>
 						<textarea id="description">{{description}}</textarea>
 					</div>
-					<div class="fields">
-						<div class="ten wide field">
+				</div>
+				<br>
+				<div class="ui fluid search selection dropdown" id="location">
+					<input type="hidden" name="location">
+					<i class="dropdown icon"></i>
+					<div class="default text">Місце проведення</div>
+					<div class="menu">
+						{{#each locations}}
+							<div class="item" data-value="{{_id}}">{{title}}</div>
+						{{/each}}
+					</div>
+				</div>
+			</div>
+			<div class="ui bottom attached tab segment" data-tab="time">
+				<div class="ui form">
+					<div class="two fields">
+						<div class="field">
 							<label for="start">Початок події</label>
 							<input type="date" id="start" value="{{start}}">
 						</div>
-						<div class="three wide field">
-							<label for="startHour">Годин</label>
-							<input type="text" id="startHour" value="{{startHour}}">
-						</div>
-						<div class="three wide field">
-							<label for="startMinute">Хвилин</label>
-							<input type="text" id="startMinute" value="{{startMinute}}">
-						</div>
-					</div>
-					<div class="fields">
-						<div class="ten wide field">
-							<label for="end">Кінець події</label>
-							<input type="date" id="end" value="{{end}}">
-						</div>
-						<div class="three wide field">
-							<label for="endHour">Годин</label>
-							<input type="text" id="endHour" value="{{endHour}}">
-						</div>
-						<div class="three wide field">
-							<label for="endMinute">Хвилин</label>
-							<input type="text" id="endMinute" value="{{endMinute}}">
+						<div class="field">
+							<div class="two fields">
+								<div class="field">
+									<label for="startHour">Годин</label>
+									<select class="time" id="startHour">
+										{{#each startHour}}
+											<option value="{{name}}" {{selected}}>{{name}}</option>
+										{{/each}}
+									</select>
+								</div>
+								<div class="field">
+									<label for="startMinute">Хвилин</label>
+									<select class="time" id="startMinute">
+										{{#each startMinute}}
+											<option value="{{name}}" {{selected}}>{{name}}</option>
+										{{/each}}
+									</select>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="two fields">
 						<div class="field">
-							<label for="type">Місце проведення</label>
-							<select id="location" class="ui dropdown">
-								<option value="0">Оберіть місце проведення</option>
-								{{#each locations}}
-									<option value="{{_id}}">{{title}}</option>
-								{{/each}}
-							</select>
+							<label for="end">Кінець події</label>
+							<input type="date" id="end" value="{{end}}">
 						</div>
 						<div class="field">
-							<label for="type">Додати нове місце</label>
-							<div class="ui icon input">
-								<input type="text" id="locationNew" value="">
-								<i class="close icon eraseLocation"></i>
+							<div class="two fields">
+								<div class="field">
+									<label for="endHour">Годин</label>
+									<select class="time" id="endHour">
+										{{#each endHour}}
+											<option value="{{name}}" {{selected}}>{{name}}</option>
+										{{/each}}
+									</select>
+								</div>
+								<div class="field">
+									<label for="endMinute">Хвилин</label>
+									<select class="time" id="endMinute">
+										{{#each endMinute}}
+											<option value="{{name}}" {{selected}}>{{name}}</option>
+										{{/each}}
+									</select>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="inline field">
-						<div class="ui checkbox">
-							<input type="checkbox" id="forGroup">
-							<label>Визначити учасників</label>
-						</div>
+				</div>
+			</div>
+			<div class="ui bottom attached tab segment" data-tab="members">
+				<div class="inline field">
+					<div class="ui checkbox">
+						<input type="checkbox" id="forGroup">
+						<label>Визначити учасників</label>
 					</div>
 				</div>
-			</form>
+			</div>
 		</div>
 	</div>
 	<div class="actions">

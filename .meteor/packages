@@ -28,3 +28,4 @@ gquemart:meteor-reactive-fullcalendar
 mrt:moment
 insecure
 cottz:publish-with-relations
+edgee:meteor-reactive-publish

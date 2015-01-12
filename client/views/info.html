@@ -1,0 +1,56 @@
+<template name="info">
+	<div class="container sport">
+		<div class="ui red segment">
+			<div class="ui header">
+				<div class="content">
+					Загальні
+				</div>
+			</div>
+			<div class="ui divider"></div>
+			<div class="ui cards">
+				<div class="card">
+					<div class="content">
+						<div class="header"><a href="/regions">Регіони/Населені пункти</a></div>
+						<div class="meta">Редагування</div>
+						<div class="description">
+							Робота з довідником, що містить регіони та населені пункти
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="content">
+						<div class="header"><a href="/sports">Види спорту</a></div>
+						<div class="meta">Редагування</div>
+						<div class="description">
+							Робота з довідником, що містить види спорту
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{#each sports}}
+			<div class="ui blue segment">
+				<div class="ui header">
+					<div class="content">
+						<a href="/sport/{{_id}}/federations">{{title}}</a>
+					</div>
+				</div>
+				<div class="ui divider"></div>
+				<div class="ui cards">
+					{{#each sportfederations}}
+						<div class="card">
+							<div class="content">
+								<div class="header"><a href="/sport/:sportId/federation/:federationId">{{title}}</a></div>
+								<div class="meta">Редагування</div>
+								<div class="description">
+									Інформація про об'єднання - {{title}}
+								</div>
+							</div>
+						</div>
+					{{/each}}
+				</div>
+			</div>
+		{{/each}}
+	</div>
+	<!--{{> modalEventType}}-->
+</template>

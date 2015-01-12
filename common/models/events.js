@@ -129,3 +129,5 @@ var EventGroupSchema = new SimpleSchema({
 });
 
 EventGroups.attachSchema(EventGroupSchema);
+
+Calendar = new Meteor.Collection("calendar");

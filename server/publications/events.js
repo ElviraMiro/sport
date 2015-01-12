@@ -15,3 +15,16 @@ Meteor.publish('eventsForUser', function() {
 	return this.ready();
 	*/
 });
+
+Meteor.reactivePublish(null, function() {
+	if (this.userId) {
+		var calendar = Calendar.findOne({_id: this.userId}, {reactive: true});
+		if (calendar) {
+			if (calendar.startWeek) {
+				var userGroups = userIsUserInGroups(this.userId),
+					events = Events.find({$and: [{startedAt: {$gte: calendar.startWeek}}, {startedAt: {$lte: calendar.endWeek}}, {finishedAt: {$gte: calendar.startWeek}}, {finishedAt: {$lte: calendar.endWeek}}], $or: [{userIds: this.userId}, {adminIds: this.userId}, {groupIds: {$in: userGroups}}]});
+				return events;
+			}
+		}
+	}
+});

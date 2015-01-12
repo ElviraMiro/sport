@@ -36,6 +36,8 @@ coffeescript@1.0.5
 cottz:publish-with-relations@2.0.1
 ddp@1.0.13
 deps@1.0.6
+edgee:meteor-reactive-publish@0.1.6
+edgee:meteor-server-deps@0.1.2
 ejson@1.0.5
 email@1.0.5
 fastclick@1.0.2

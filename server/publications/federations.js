@@ -36,3 +36,7 @@ Meteor.publish("federation", function(fId) {
 		Regions.find({_id: federation.locationId})
 	]
 });
+
+Meteor.publish("sportFederations", function(sId) {
+	return Federations.find();
+});

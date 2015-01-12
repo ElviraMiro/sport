@@ -32,6 +32,19 @@ Router.map(function () {
     }
   });
 
+  this.route('info', {
+    path: '/info', 
+    template: 'info',
+    layoutTemplate: 'layout',
+    loadingTemplate: 'loading',
+    waitOn: function () {
+      return [
+        Meteor.subscribe("sports"),
+        Meteor.subscribe("sportFederations")
+      ];
+    }
+  });
+
   this.route('regions', {
     path: '/regions', 
     template: 'regions',

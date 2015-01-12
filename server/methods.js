@@ -1,4 +1,7 @@
 Meteor.methods({
+    "setCalendarData": function(start, end) {
+        Calendar.upsert(this.userId, {$set: {startWeek: start, endWeek: end}});
+    },
     "getEvents": function(start, end) {
         // Get only events from one document of the Calendars collection
         // events is a field of the Calendars collection document
@@ -18,7 +21,6 @@ Meteor.methods({
             };
             events.push(eventDetails);
         });
-        console.log("EVENTS: ", events);
         return events;
     }
 });
