@@ -1,0 +1,123 @@
+<template name="group">
+	<div class="container sport">
+		<h3 class="ui dividing header">{{group.title}}</h3>
+		<div class="ui segment">
+			<h4 class="ui dividing header">Учасники</h4>
+			<div class="ui cards">
+				{{#each group.userIds}}
+					<div class="card" style="cursor:pointer">
+						<div class="content">
+							<span class="avatar">
+								<img src="{{getAvatarURL this}}">
+							</span> <b>{{getProfileName this}}</b>
+							<br><br>
+							<!--canvas id="{{this}}" width="262" height="200"></canvas>
+							<div id="l{{this}}"></div-->
+							<div class="description">
+								{{#if userRates}}
+									{{#each userRates}}
+										{{ratedAt}}
+										<div class="ui progress success" data-percent="9">
+											<div class="bar" style="-webkit-transition: 300ms; transition: 300ms; width: {{additional.percent}}%;">
+												<div class="progress">{{result}}</div>
+											</div>
+											<div class="label">{{additional.name}}</div>
+										</div>
+									{{/each}}
+								{{else}}
+									Ще не оцінювався
+								{{/if}}
+							</div>
+						</div>
+						<div class="extra content rate" id="{{this}}" style="cursor: pointer">
+							<i class="star icon"></i> Виставити оцінку
+						</div>
+					</div>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+</template>
+
+
+<template name="modalAddGroupMember">
+	<i class="close icon cancel"></i>
+	<div class="header">
+		Додати контактну особу
+	</div>
+	<div class="content">
+		<div class="description">
+			<div class="ui segment">
+				<div class="ui icon input">
+					<input type="text" class="name" id="name1" placeholder="Прізвище...">
+					<i class="search icon"></i>
+				</div>
+				<div class="ui icon input">
+					<input type="text" class="name" id="name2" placeholder="Ім'я...">
+					<i class="search icon"></i>
+				</div>
+				<div class="ui icon input">
+					<input type="text" class="name" id="name3" placeholder="По батькові...">
+					<i class="search icon"></i>
+				</div>
+				<br>
+				{{#each users}}
+					<div class="ui image label addContactUser" style="cursor:pointer;margin-top:10px">
+						<img src="{{getAvatarURL _id}}">
+						{{getProfileName _id}}
+					</div>
+				{{/each}}
+			</div>
+			<div class="ui divided items">
+				{{#each contacts}}
+					<div class="item">
+						<div class="ui tiny image">
+							<img src="{{getAvatarURL this}}">
+						</div>
+						<div class="middle aligned content">
+							{{getProfileName this}}
+							<div class="ui form">
+								<div class="field">
+									<label>Заповніть посаду</label>
+									<input class="{{this}}" type="text">
+								</div>
+							</div>
+						</div>
+					</div>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button cancel">Cancel</div>
+		<div class="ui button teal saveContact">OK</div>
+	</div>
+</template>
+
+<template name="modalRateMember">
+	<i class="close icon cancel"></i>
+	<div class="header">
+		{{#if userId}}
+			{{getProfileName userId}}
+		{{/if}}
+		<div class="ui divider"></div>
+		Оцінювання
+	</div>
+	<div class="content">
+		<div class="description">
+			<div class="ui form">
+				{{#each rates}}
+					<div class="field">
+						<label>{{title}} - ({{min}} - {{max}})</label>
+						<input type="text" id="{{_id}}">
+						<i>{{description}}</i>
+					</div>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button cancel">Cancel</div>
+		<div class="ui button teal saveRate">OK</div>
+	</div>
+</template>

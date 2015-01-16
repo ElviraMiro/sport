@@ -1,56 +1,83 @@
 <template name="info">
 	<div class="container sport">
-		<div class="ui red segment">
-			<div class="ui header">
-				<div class="content">
-					Загальні
-				</div>
-			</div>
-			<div class="ui divider"></div>
-			<div class="ui cards">
-				<div class="card">
-					<div class="content">
-						<div class="header"><a href="/regions">Регіони/Населені пункти</a></div>
-						<div class="meta">Редагування</div>
-						<div class="description">
-							Робота з довідником, що містить регіони та населені пункти
-						</div>
-					</div>
-				</div>
-				<div class="card">
-					<div class="content">
-						<div class="header"><a href="/sports">Види спорту</a></div>
-						<div class="meta">Редагування</div>
-						<div class="description">
-							Робота з довідником, що містить види спорту
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		{{#each sports}}
-			<div class="ui blue segment">
+		{{#if isAdmin}}
+			<div class="ui red segment">
 				<div class="ui header">
 					<div class="content">
-						<a href="/sport/{{_id}}/federations">{{title}}</a>
+						Загальні
 					</div>
 				</div>
 				<div class="ui divider"></div>
 				<div class="ui cards">
-					{{#each sportfederations}}
-						<div class="card">
-							<div class="content">
-								<div class="header"><a href="/sport/:sportId/federation/:federationId">{{title}}</a></div>
-								<div class="meta">Редагування</div>
-								<div class="description">
-									Інформація про об'єднання - {{title}}
-								</div>
+					<div class="card">
+						<div class="content">
+							<div class="header"><a href="/regions">Регіони/Населені пункти</a></div>
+							<div class="meta">Редагування</div>
+							<div class="description">
+								Робота з довідником, що містить регіони та населені пункти
 							</div>
 						</div>
-					{{/each}}
+					</div>
+					<div class="card">
+						<div class="content">
+							<div class="header"><a href="/sports">Види спорту</a></div>
+							<div class="meta">Редагування</div>
+							<div class="description">
+								Робота з довідником, що містить види спорту
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-		{{/each}}
+		{{/if}}
+		<div class="ui red segment">
+			<div class="ui form">
+				<h4 class="ui dividing header">Фільтрація</h4>
+				<div class="field sportId">
+					<select class="ui dropdown">
+						<option value="ALL">Всі види спорту</option>
+						{{#each sports}}
+							<option value="{{_id}}">{{title}}</option>
+						{{/each}}
+					</select>
+				</div>
+				<div class="field region">
+					<select class="ui dropdown">
+						<option value="ALL">Всі регіони/населені пункти</option>
+						{{#each regions}}
+							<option value="{{region._id}}" {{isSelected}}>{{{probely}}}{{region.title}}</option>
+						{{/each}}
+					</select>
+				</div>
+			</div>
+			{{#each sports}}
+				<div class="ui blue segment">
+					<div class="ui header">
+						<div class="content">
+							{{#if isAdmin}}
+								<a href="/sport/{{_id}}/federations">{{title}}</a>
+							{{else}}
+								{{title}}
+							{{/if}}
+						</div>
+					</div>
+					<div class="ui divider"></div>
+					<div class="ui cards">
+						{{#each sportfederations}}
+							<div class="card">
+								<div class="content">
+									<div class="header"><a href="/sport/{{sportId}}/federation/{{_id}}">{{title}}</a></div>
+									<div class="meta">{{action}}</div>
+									<div class="description">
+										Інформація про об'єднання - {{title}}
+									</div>
+								</div>
+							</div>
+						{{/each}}
+					</div>
+				</div>
+			{{/each}}
+		</div>
 	</div>
 	<!--{{> modalEventType}}-->
 </template>

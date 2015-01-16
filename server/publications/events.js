@@ -1,22 +1,19 @@
 Meteor.publish('eventsForUser', function() {
+	var userGroups = userIsUserInGroups(this.userId),
+		events = Events.find({$or: [{userIds: this.userId}, {adminIds: this.userId}, {groupIds: {$in: userGroups}}]}, {fields: {eventTypeId: 1, locationId: 1}}).fetch(),
+		types = [],
+		locations = [];
+	if (events.length > 0) {
+		types = _.pluck(events, 'eventTypeId');
+		locations = _.pluck(events, 'locationId');
+	}
 	return [
-		EventTypes.find({ownerId: this.userId}),
-		Locations.find({ownerId: this.userId}),
+		EventTypes.find({$or: [{ownerId: this.userId}, {ownerId: null}, {_id: {$in: types}}]}),
+		Locations.find({$or: [{ownerId: this.userId}, {ownerId: null}, {_id: {$in: locations}}]})
 	]
-	/*Publish.relations(this, Events.find({startedAt: {$gte: startWeek}}, {sort: {startedAt: 1}}), function(id, doc) {
-		doc.eventType = this.changeParentDoc(EventTypes.find(doc.eventTypeId), function(eventType) {
-			console.log("EVENT TYPE: ", eventType);
-			return eventType.title;
-		});
-		doc.location = this.changeParentDoc(Locations.find(doc.locationId), function(location) {
-			return location.title;
-		});
-	});
-	return this.ready();
-	*/
 });
 
-Meteor.reactivePublish(null, function() {
+Meteor.reactivePublish("events", function() {
 	if (this.userId) {
 		var calendar = Calendar.findOne({_id: this.userId}, {reactive: true});
 		if (calendar) {

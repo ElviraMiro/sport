@@ -6,12 +6,23 @@
         <a class="item" href="{{pathFor 'calendar'}}">
             <i class="calendar icon"></i> Розклад
         </a>
-        <a class="item">
-            <i class="rocket icon"></i> Мої досягнення 
-        </a>
-        <a class="item">
-            <i class="users icon"></i> Мої групи
-        </a>
+        {{#if isMember}}
+            <a class="item">
+                <i class="rocket icon"></i> Мої досягнення 
+            </a>
+        {{/if}}
+        {{#if groups}}
+            <div class="item">
+                <i class="users icon"></i> Мої групи
+                <div class="menu">
+                    {{#each groups}}
+                        <a class="item" href="{{pathFor 'group' id=_id}}">
+                            {{title}}
+                        </a>
+                    {{/each}}
+                </div>
+            </div>
+        {{/if}}
         <a href="/info" class="item">
             <i class="info icon"></i> Інформація
         </a>
@@ -58,7 +69,7 @@
 </template>
 
 <template name="topnav">
-    <div class="ui top attached menu">
+    <div class="ui top attached fixed menu">
         <div class="item toggleLeftnav">
             <i class="content icon"></i>
         </div>

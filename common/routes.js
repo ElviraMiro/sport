@@ -16,7 +16,11 @@ Router.map(function () {
       startWeek = startWeek.startOf("week").add(1, "days");
       startWeek = startWeek.toDate();
       Session.set("startWeek", startWeek);*/
-      return [Meteor.subscribe("eventsForUser")];
+      return [
+        Meteor.subscribe("eventsForUser"),
+        Meteor.subscribe("events"),
+        Meteor.subscribe("usersForSearch")
+      ];
     }
   });
 
@@ -27,8 +31,9 @@ Router.map(function () {
     loadingTemplate: 'loading',
     waitOn: function () {
       Session.set("selectedUserId", this.params.id);
-      return [Meteor.subscribe("userProfile", Session.get("selectedUserId")),
-        Meteor.subscribe("userAvatar", Session.get("selectedUserId"))];
+      return [
+        Meteor.subscribe("userProfile", Session.get("selectedUserId"))
+      ];
     }
   });
 
@@ -40,7 +45,8 @@ Router.map(function () {
     waitOn: function () {
       return [
         Meteor.subscribe("sports"),
-        Meteor.subscribe("sportFederations")
+        Meteor.subscribe("sportFederations"),
+        Meteor.subscribe("regions")
       ];
     }
   });
@@ -84,7 +90,24 @@ Router.map(function () {
     waitOn: function () {
       Session.set("selectedSportId", this.params.sportId);
       Session.set("selectedFederationId", this.params.federationId);
-      return [Meteor.subscribe("federation", Session.get("selectedFederationId"))];
+      return [
+        Meteor.subscribe("federation", Session.get("selectedFederationId")),
+        Meteor.subscribe("usersForSearch")
+      ];
+    }
+  });
+
+  this.route('group', {
+    path: '/group/:id', 
+    template: 'group',
+    layoutTemplate: 'layout',
+    loadingTemplate: 'loading',
+    waitOn: function () {
+      Session.set("selectedGroupId", this.params.id);
+      return [
+        Meteor.subscribe("group", Session.get("selectedGroupId")),
+        Meteor.subscribe("usersForSearch")
+      ];
     }
   });
 

@@ -30,8 +30,17 @@ getUserName = function(uId) {
 };
 
 getUserEmail = function(uId) {
-	var user = Meteor.users.findOne(uId);
-	return user.emails[0].address;
+	var userProfile = UserProfiles.findOne(uId),
+		user = Meteor.users.findOne(uId);
+	if (userProfile.email) {
+		return userProfile.email;
+	} else {
+		if (user.emails) {
+			return user.emails[0].address;
+		} else {
+			return "Анонім"
+		}
+	}
 };
 
 getUserPhone = function(uId) {
@@ -202,3 +211,18 @@ getFederationsHierarchy = function(sportId) {
 	}
 	return result;
 };
+
+filteredUserQuery = function(filter, arrayNo) {
+	var queryLimit = 25,
+		users = [];
+	if(!!filter) {
+		users = UserProfiles.find({
+			firstName: {$regex: filter.name2, $options: 'i'},
+			secondName: {$regex: filter.name3, $options: 'i'},
+			surname: {$regex: filter.name1, $options: 'i'},
+			_id: {$nin: arrayNo}
+		}, {limit: queryLimit});
+	}
+	return users;
+};
+

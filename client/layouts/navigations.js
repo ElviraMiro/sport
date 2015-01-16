@@ -18,6 +18,9 @@ Template.leftnav.helpers({
 			return "";
 		}
 		return "hidden";
+	},
+	groups: function() {
+		return Groups.find({adminIds: Meteor.userId()});
 	}
 });
 

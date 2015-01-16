@@ -50,12 +50,11 @@
 				<div class="ui form">
 					<div class="two fields">
 						<div class="field">
-							<label for="start">Початок події</label>
-							<input type="date" id="start" value="{{start}}">
-						</div>
-						<div class="field">
+							<h3 class="ui dividing header">Початок події</h3>
 							<div class="two fields">
 								<div class="field">
+									<!--label for="start">Початок події</label>
+									<input type="date" id="start" value="{{start}}"-->
 									<label for="startHour">Годин</label>
 									<select class="time" id="startHour">
 										{{#each startHour}}
@@ -73,16 +72,11 @@
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="two fields">
 						<div class="field">
-							<label for="end">Кінець події</label>
-							<input type="date" id="end" value="{{end}}">
-						</div>
-						<div class="field">
+							<h3 class="ui dividing header">Кінець події</h3>
 							<div class="two fields">
 								<div class="field">
-									<label for="endHour">Годин</label>
+									<label>Годин</label>
 									<select class="time" id="endHour">
 										{{#each endHour}}
 											<option value="{{name}}" {{selected}}>{{name}}</option>
@@ -90,7 +84,7 @@
 									</select>
 								</div>
 								<div class="field">
-									<label for="endMinute">Хвилин</label>
+									<label>Хвилин</label>
 									<select class="time" id="endMinute">
 										{{#each endMinute}}
 											<option value="{{name}}" {{selected}}>{{name}}</option>
@@ -100,14 +94,70 @@
 							</div>
 						</div>
 					</div>
+					<h3 class="ui dividing header" style="margin-top:0px">Дати, в які буде відбуватися подія</h3>
+					{{#each dates}}
+						<div class="ui teal label" style="margin-bottom:10px;">
+							{{moment this 'full'}}
+							<i class="delete icon deleteDate"></i>
+						</div>
+					{{/each}}
+					<div class="ui action input">
+						<input type="date" id="newDate" value="{{date}}">
+						<div class="ui teal button addDate">Додати</div>
+					</div>
 				</div>
 			</div>
 			<div class="ui bottom attached tab segment" data-tab="members">
-				<div class="inline field">
-					<div class="ui checkbox">
-						<input type="checkbox" id="forGroup">
-						<label>Визначити учасників</label>
+				{{#each members}}
+					<div class="ui image teal label">
+						<img src="{{getAvatarURL this}}">
+						{{#if isCurrentUser}}
+							Я
+						{{else}}
+							{{getProfileName this}}
+						{{/if}}
+						<i class="delete icon deleteMember"></i>
 					</div>
+				{{/each}}
+				<div class="ui segment">
+					<div class="ui form">
+						<div class="field">
+							<label>Додати учасників</label>
+							<select class="memberFrom">
+								<option value="fio">Шукати за ПІБ</option>
+								<option value="group">Додати групу</option>
+							</select>
+						</div>
+					</div>
+					{{#if isGroup}}
+						{{#each groups}}
+							<div class="ui label">
+								{{title}}
+								<i class="add icon addGroupMembers"></i>
+							</div>
+						{{/each}}
+					{{else}}
+						<br>
+						<div class="ui icon input">
+							<input type="text" class="name" id="name1" placeholder="Прізвище...">
+							<i class="search icon"></i>
+						</div>
+						<div class="ui icon input">
+							<input type="text" class="name" id="name2" placeholder="Ім'я...">
+							<i class="search icon"></i>
+						</div>
+						<div class="ui icon input">
+							<input type="text" class="name" id="name3" placeholder="По батькові...">
+							<i class="search icon"></i>
+						</div>
+						<br>
+						{{#each users}}
+							<div class="ui image label addMember" style="cursor:pointer;margin-top:10px">
+								<img src="{{getAvatarURL _id}}">
+								{{getProfileName _id}}
+							</div>
+						{{/each}}
+					{{/if}}
 				</div>
 			</div>
 		</div>

@@ -29,3 +29,4 @@ mrt:moment
 insecure
 cottz:publish-with-relations
 edgee:meteor-reactive-publish
+mrt:chartjs

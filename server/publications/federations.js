@@ -27,12 +27,32 @@ Meteor.publish("federation", function(fId) {
 	if (federation.contacts) {
 		contacts = federation.contacts;
 	}
+	var groups = Groups.find({federationId: fId}, {fields: {adminIds: 1, userIds: 1}}).fetch(),
+		groupUsers = [];
+	for (var i=0; i<groups.length; i++) {
+		groupUsers = groupUsers.concat(groups[i].adminIds, groups[i].userIds);
+	};
 	return [
 		Sports.find({_id: federation.sportId}),
 		Federations.find({$or: [{_id: fId}, {_id: federation.parentId}]}),
-		Meteor.users.find({$or: [{_id: {$in: admins}}, {_id: {$in: contacts}}]}),
-		UserProfiles.find({$or: [{_id: {$in: admins}}, {_id: {$in: contacts}}]}),
-		Avatars.find({$or: [{"metadata.owner": {$in: admins}}, {'metadata.owner': {$in: contacts}}, {'metadata.owner': fId}]}),
+		Groups.find({federationId: federation._id}),
+		Meteor.users.find({$or: [
+			{_id: {$in: admins}},
+			{_id: {$in: groupUsers}},
+			{_id: {$in: _.pluck(contacts, "profileId")}}
+		]}),
+		UserProfiles.find({$or: [
+			{_id: {$in: admins}},
+			{_id: {$in: groupUsers}},
+			{_id: {$in: _.pluck(contacts, "profileId")}}
+		]}),
+		Avatars.find({$or: [
+			{"metadata.owner": {$in: admins}},
+			{'metadata.owner': {$in: _.pluck(contacts, "profileId")}},
+			{'metadata.owner': fId},
+			{'metadata.owner': {$in: groupUsers}}
+		]}),
+		Qualifications.find({federationId: fId}),
 		Regions.find({_id: federation.locationId})
 	]
 });

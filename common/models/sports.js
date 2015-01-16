@@ -68,18 +68,35 @@ var ValueSchema = new SimpleSchema({
 		max: 200,
 		optional: true
 	},
-	eventId: {
+	groupId: {
 		type: String,
 		max: 50,
 		optional: true
 	},
 	authorId: {
 		type: String,
-		max: 50
+		max: 50,
+		autoValue: function() {
+			if (this.isInsert) {
+				return this.userId;
+			}
+		}
 	},
-	destionationId: {
+	result: {
+		type: Number
+	},
+	destinationId: {
 		type: String,
 		max: 50
+	},
+	ratedAt: {
+		type: String,
+		autoValue: function() {
+			if (this.isInsert) {
+				var date = moment(new Date()).format("YYYY-MM-DD");
+				return date;
+			}
+		}
 	}
 });
 

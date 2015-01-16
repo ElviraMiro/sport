@@ -1,3 +1,5 @@
+UserData = new Meteor.Collection("userdata");
+
 UserRoles = new Meteor.Collection("userroles");
 
 UserProfiles = new Meteor.Collection("userprofiles");
@@ -36,6 +38,10 @@ var UserProfileSchema = new SimpleSchema({
 	userId: {
 		type: String,
 		max: 50,
+		optional: true
+	},
+	email: {
+		type: String,
 		optional: true
 	}
 });
@@ -91,5 +97,5 @@ Avatars.allow({
 
 Meteor.users.after.insert(function(userId, doc) {
 	var uId = doc._id;
-	UserProfiles.insert({_id: uId});
+	UserProfiles.insert({_id: uId, email: doc.emails[0].address});
 });

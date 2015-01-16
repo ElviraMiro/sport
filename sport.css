@@ -1,5 +1,5 @@
 .sport {
-  padding: 10px 10px 10px 10px;
+  padding: 55px 10px 10px 10px;
 }
 
 @media only screen and (max-width: @computerBreakpoint) {
