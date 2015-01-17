@@ -119,6 +119,12 @@
 						<i class="delete icon deleteMember"></i>
 					</div>
 				{{/each}}
+				{{#each groups}}
+					<div class="ui image teal label">
+						{{title}}
+						<i class="delete icon deleteGroup"></i>
+					</div>
+				{{/each}}
 				<div class="ui segment">
 					<div class="ui form">
 						<div class="field">
@@ -130,10 +136,11 @@
 						</div>
 					</div>
 					{{#if isGroup}}
-						{{#each groups}}
-							<div class="ui label">
+						<br>
+						{{#each searchGroups}}
+							<div class="ui label addGroupMember" style="cursor: pointer">
 								{{title}}
-								<i class="add icon addGroupMembers"></i>
+								<i class="add icon"></i>
 							</div>
 						{{/each}}
 					{{else}}

@@ -9,7 +9,8 @@ Meteor.publish('eventsForUser', function() {
 	}
 	return [
 		EventTypes.find({$or: [{ownerId: this.userId}, {ownerId: null}, {_id: {$in: types}}]}),
-		Locations.find({$or: [{ownerId: this.userId}, {ownerId: null}, {_id: {$in: locations}}]})
+		Locations.find({$or: [{ownerId: this.userId}, {ownerId: null}, {_id: {$in: locations}}]}),
+		Groups.find({_id: {$in: userGroups}})
 	]
 });
 

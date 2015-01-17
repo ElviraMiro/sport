@@ -170,7 +170,7 @@ Template.modalAddEvent.helpers({
         }
     },
     groups: function() {
-        return Groups.find();
+        return Groups.find({_id: {$in: Session.get("selectedGroups")}});
     },
     users: function() {
         var result = [];
@@ -178,6 +178,10 @@ Template.modalAddEvent.helpers({
             result = filteredUserQuery(Session.get("filter"), Session.get("selectedMembers"));
         }
         return result;
+    },
+    searchGroups: function() {
+        var userGroups = userIsAdminInGroups(Meteor.userId());
+        return Groups.find({$and: [{_id: {$in: userGroups}},{_id: {$nin: Session.get("selectedGroups")}}]});
     }
 });
 
@@ -326,5 +330,10 @@ Template.modalAddEvent.events({
         users.push(this._id);
         UserData.upsert(Meteor.userId(), {$set: {find: users}});
         Session.set("selectedMembers", users);
+    },
+    'click .addGroupMember': function(e, t) {
+        var groups = Session.get("selectedGroups");
+        groups.push(this._id);
+        Session.set("selectedGroups", groups);
     },
 });

@@ -119,12 +119,8 @@ userIsUserInGroups = function(uId) {
 };
 
 userIsAdminInGroups = function(uId) {
-	var groups = Groups.find({adminIds: uId}).fetch(),
-		result = [];
-	for (var i=0; i<groups.length; i++) {
-		result.push(groups[i]._id);
-	}
-	return result;
+	var groups = Groups.find({adminIds: uId}, {fields: {_id: 1}}).fetch();
+	return _.pluck(groups, "_id");
 };
 
 sportsForUser = function(uId) {
