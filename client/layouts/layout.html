@@ -9,3 +9,14 @@
 	</div>
 </template>
 
+<template name="cordobalayout">
+	{{> topinfo}}
+	<div class="pusher">
+		{{> yield}}
+	</div>
+	<div class="ui modal long modalWindow">
+		{{> Template.dynamic template=modalWindow}}
+	</div>
+	{{> bottomnav}}
+</template>
+

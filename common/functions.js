@@ -222,3 +222,11 @@ filteredUserQuery = function(filter, arrayNo) {
 	return users;
 };
 
+setUserFilter = _.throttle(function(template) {
+	var name1 = $("#name1").val(),
+		name2 = $("#name2").val(),
+		name3 = $("#name3").val();
+	Session.set("filter", {name1: name1, name2: name2, name3: name3});
+	UserData.upsert({_id: Meteor.userId()}, {$set: {search: Session.get("filter")}});
+}, 500);
+

@@ -1,3 +1,5 @@
+Session.set("filter", {name1: "", name2: "", name3: ""});
+
 drawChart = function(el) {
 	var options = {
 
@@ -110,12 +112,14 @@ Template.group.helpers({
 
 Template.group.events({
 	'click .rate': function(e, t) {
-		var userId = e.currentTarget.id;
-		if (userId == Meteor.users.findOne({_id: {$ne: Meteor.userId()}})) {
-			console.log(Meteor.users.findOne({_id: {$ne: Meteor.userId()}}))
-		}
+		var userId = this.valueOf();
 		Session.set("selectedMemberId", userId);
 		Session.set("modalWindow", "modalRateMember");
+		$(".modalWindow").modal("show");
+	},
+	'click .addMember': function(e, t) {
+		Session.set("selectedMembers", []);
+		Session.set("modalWindow", "modalAddMembers");
 		$(".modalWindow").modal("show");
 	}
 });
@@ -126,6 +130,52 @@ Template.group.rendered = function() {
 		drawChart(el);
 	});*/
 }
+
+Template.modalAddMembers.helpers({
+	users: function() {
+		var result = [];
+		if (Session.get("filter")) {
+			result = filteredUserQuery(Session.get("filter"), Session.get("selectedMembers"));
+		}
+		return result;
+	},
+	members: function() {
+		return Session.get("selectedMembers");
+	}
+});
+
+Template.modalAddMembers.events({
+	'click .cancel': function(e, t) {
+		Session.set("selectedMembers", []);
+		Session.set("filter", {name1: "", name2: '', name3: ''});
+		Session.set("modalWindow", null);
+		$(".modalWindow").modal("hide");
+	},
+	'keyup .name': function(e, t) {
+		setUserFilter(t);
+	},
+	'click .addMember': function(e, t) {
+		var members = Session.get("selectedMembers");
+		members.push(this._id);
+		UserData.upsert(Meteor.userId(), {$set: {find: members}});
+		Session.set("selectedMembers", members);
+	},
+	'click .saveMember': function(e, t) {
+		var members = Session.get("selectedMembers"),
+			result = _.map(contacts, function(id) {
+				return {
+					profileId: id,
+					position: $("."+id).val()
+				}
+			});
+		Federations.update({_id: Session.get("selectedFederationId")}, {$set: {contacts: result}});
+		Session.set("filter", {name1: "", name2: "", name3: ""});
+		Session.set("selectedContacts", []);
+		UserData.upsert(Meteor.userId(), {$set: {find: null, search: null}});
+		Session.set("modalWindow", null);
+		$(".modalWindow").modal("hide");
+	}
+})
 
 Template.modalRateMember.helpers({
 	userId: function() {

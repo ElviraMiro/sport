@@ -2,7 +2,12 @@
 	<div class="container sport">
 		<h3 class="ui dividing header">{{group.title}}</h3>
 		<div class="ui segment">
-			<h4 class="ui dividing header">Учасники</h4>
+			<h4 class="ui dividing header">
+				Учасники
+				<div class="ui right floated button teal addMember">
+					Додати учасника
+				</div>
+			</h4>
 			<div class="ui cards">
 				{{#each group.userIds}}
 					<div class="card" style="cursor:pointer">
@@ -40,10 +45,10 @@
 </template>
 
 
-<template name="modalAddGroupMember">
+<template name="modalAddMembers">
 	<i class="close icon cancel"></i>
 	<div class="header">
-		Додати контактну особу
+		Додати учасників групи
 	</div>
 	<div class="content">
 		<div class="description">
@@ -69,19 +74,13 @@
 				{{/each}}
 			</div>
 			<div class="ui divided items">
-				{{#each contacts}}
+				{{#each members}}
 					<div class="item">
 						<div class="ui tiny image">
 							<img src="{{getAvatarURL this}}">
 						</div>
 						<div class="middle aligned content">
 							{{getProfileName this}}
-							<div class="ui form">
-								<div class="field">
-									<label>Заповніть посаду</label>
-									<input class="{{this}}" type="text">
-								</div>
-							</div>
 						</div>
 					</div>
 				{{/each}}
@@ -90,7 +89,7 @@
 	</div>
 	<div class="actions">
 		<div class="ui button cancel">Cancel</div>
-		<div class="ui button teal saveContact">OK</div>
+		<div class="ui button teal saveMembers">OK</div>
 	</div>
 </template>
 

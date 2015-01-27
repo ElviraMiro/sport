@@ -80,3 +80,29 @@
         {{/if}}
     </div>
 </template>
+
+<template name="topinfo">
+    <div class="ui top attached fixed menu">
+        <div class="item toggleLeftnav">
+            <i class="content icon"></i>
+        </div>
+        {{#if currentUser}}
+            <div class="item right">
+                <span class="text"><img src="{{getAvatarURL currentUser._id}}" class="ui image avatar" style="height:15px;width:15px"> {{getProfileName currentUser._id}}</span>
+            </div>
+        {{/if}}
+    </div>
+</template>
+
+<template name="bottomnav">
+    <div class="ui bottom attached fixed menu">
+        <div class="item toggleLeftnav">
+            <i class="content icon"></i>
+        </div>
+        {{#if currentUser}}
+            <div class="item right">
+                <span class="text"><img src="{{getAvatarURL currentUser._id}}" class="ui image avatar" style="height:15px;width:15px"> {{getProfileName currentUser._id}}</span>
+            </div>
+        {{/if}}
+    </div>
+</template>

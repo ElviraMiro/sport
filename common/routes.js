@@ -24,6 +24,20 @@ Router.map(function () {
     }
   });
 
+  this.route('cordoba', {
+    path: '/cordoba', 
+    template: 'cordoba',
+    layoutTemplate: 'cordobalayout',
+    loadingTemplate: 'loading',
+    waitOn: function () {
+      return [
+        Meteor.subscribe("eventsForUser"),
+        Meteor.subscribe("events"),
+        Meteor.subscribe("usersForSearch")
+      ];
+    }
+  });
+
   this.route('profile', {
     path: '/profile/:id', 
     template: 'profile',
